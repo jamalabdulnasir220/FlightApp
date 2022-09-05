@@ -58,7 +58,7 @@ class WidgetComponent {
           borderRadius: BorderRadius.circular(radius)
       ),
       fillColor: coloring,
-      child: Text(label, style: TextStyle(color: textColor, fontWeight: bolds, fontSize: size),),
+      child: Text(label, style: TextStyle(color: textColor, fontWeight: bolds, fontSize: size, fontFamily: "Gilroy-Regular"),),
       onPressed: onPressed
   );
 
@@ -68,7 +68,7 @@ class WidgetComponent {
     VoidCallback? onPressed,
   }) => ListTile(
       leading: Icon(leads),
-      title: Text(titles),
+      title: Text(titles, style: TextStyle(fontFamily: "Gilroy-Regular"),),
       onTap: onPressed,
       trailing: IconButton(icon: Icon(icons), onPressed: onPressed),
     );

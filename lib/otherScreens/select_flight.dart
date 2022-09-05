@@ -15,7 +15,7 @@ class _SelectFlightState extends State<SelectFlight> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Select Flight"),
+        title: Text("Select Flight", style: TextStyle(fontFamily: "Gilroy-Regular"),),
       ),
       body: ListView(
         children: [
@@ -68,16 +68,16 @@ class FlightCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text('Accra',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),),
+                          Text('Accra',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, fontFamily: "Gilroy-Regular"),),
                           SizedBox(width: 10,),
-                          Text('Price: GHC 48.00'),
+                          Text('Price: GHC 48.00', style: TextStyle(fontFamily: "Gilroy-Regular"),),
                         ],
                       ),
                       SizedBox(height: 10,),
 
                       Row(
                         children: [
-                          Text('Tue 26 Jul 2022',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey)),
+                          Text('Tue 26 Jul 2022',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey, fontFamily: "Gilroy-Regular")),
                           ],
                       ),
                     ],
@@ -85,12 +85,12 @@ class FlightCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Kumasi',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),),
+                      Text('Kumasi',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, fontFamily: "Gilroy-Regular"),),
                       SizedBox(height: 10,),
 
                       Row(
                         children: [
-                          Text('Tue 26 Jul 2022',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey)),
+                          Text('Tue 26 Jul 2022',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.grey, fontFamily: "Gilroy-Regular")),
                           ],
                       ),
                     ],
@@ -101,7 +101,7 @@ class FlightCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('18:50 PM',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800),),
+                  Text('18:50 PM',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, fontFamily: "Gilroy-Regular"),),
                   SizedBox(width: 10,),
 
 
@@ -118,7 +118,7 @@ class FlightCard extends StatelessWidget {
                   SizedBox(width: 10,),
 
 
-                  Text('19:35 PM',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800),),
+                  Text('19:35 PM',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, fontFamily: "Gilroy-Regular"),),
                 ],
               )
             ],

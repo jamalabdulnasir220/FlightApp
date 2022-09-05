@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:snippet_coder_utils/FormHelper.dart';
 import 'package:theo/otherScreens/select_bus.dart';
 import 'package:theo/otherScreens/select_flight.dart';
 
 import '../components/color.dart';
 import '../components/widget_component.dart';
+import '../dimensions/dimensions.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -36,9 +38,8 @@ class HomeState extends State<Home> {
       resizeToAvoidBottomInset: false,
 
       body: ListView(
-        padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 15.0),
+        padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 25.0),
         children: <Widget>[
-
           Container(
               height: height/9,
               child: Image.asset('images/easygo.png')),
@@ -65,7 +66,7 @@ class HomeState extends State<Home> {
                     color: bus? Colors.blueAccent :Colors.white,
                   ),
                   child: Center(
-                    child: Text('Bus', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: bus?Colors.white:Colors.black),),
+                    child: Text('Bus', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: bus?Colors.white:Colors.black, fontFamily: "Gilroy-Regular"),),
                   ),
                 ),
               ),
@@ -87,7 +88,7 @@ class HomeState extends State<Home> {
                     ]
                   ),
                   child: Center(
-                    child: Text('Airplane', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: !bus?Colors.white:Colors.black),),
+                    child: Text('Airplane', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: !bus?Colors.white:Colors.black, fontFamily: "Gilroy-Regular"),),
                   ),
                 ),
               )
@@ -129,18 +130,30 @@ class BusScreen extends StatefulWidget {
 }
 
 class _BusScreenState extends State<BusScreen> {
-  TextEditingController fromController = new TextEditingController();
-  TextEditingController toController = new TextEditingController();
   DateTime? date;
-  var agencies = ['Select Agency','VIP Agency', 'STC Agency','Metro Mass'];
-  String dropDownValue = 'Select Agency';
-  String dropDownval = "Accra";
-  String dropDown = "To";
-  var departure = ["From","Accra", "Kumasi", "Takoradi"];
-  var arrival = ["To","Accra", "Kumasi", "Takoradi"];
+   var agencies = ['Select Agency','VIP Agency', 'STC Agency','Metro Mass'];
+   String dropDownValue = 'Select Agency';
 
-  String dropDownV = "Kumasi";
-  String dropD = "From";
+  List<dynamic> departure = [];
+
+  String? departureId;
+
+  List<dynamic> arrival = [];
+  String? arrivalId;
+
+  @override
+  void initState(){
+    super.initState();
+
+    this.departure.add({"id":1, "label":"Accra"});
+    this.departure.add({"id":2, "label":"Kumasi"});
+    this.departure.add({"id":3, "label":"Takoradi"});
+
+    this.arrival.add({"id":1, "label":"Accra"});
+    this.arrival.add({"id":2, "label":"Kumasi"});
+    this.arrival.add({"id":3, "label":"Takoradi"});
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -152,103 +165,68 @@ class _BusScreenState extends State<BusScreen> {
         // SizedBox(
         //   width: MediaQuery.of(context).size.width,
         //     child: Text('Where do you want to travel to?', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 25),)),
-        Container(
-          width: width/2.5,
-          height: 40,
-          padding: EdgeInsets.only(left: 4, right: 2, top: 2, bottom: 0),
-          decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(spreadRadius: 1, blurRadius: 4, color: Colors.black26)
-              ],
-              color: Colors.white
-          ),
-          child: DropdownButton(
-            borderRadius: BorderRadius.circular(20),
-            elevation: 2,
-            style: TextStyle(color: Colors.black),
-            value: dropDownValue,
-            icon: const Icon(Icons.keyboard_arrow_down),
-            items: agencies.map((String items) {
-              return DropdownMenuItem(
-                value: items,
-                child: Text(items, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              setState(() {
-                dropDownValue = newValue!;
-              });
-            },
-          ),
+        DropdownButton(
+          style: TextStyle(color: Colors.black),
+          value: dropDownValue,
+          icon: const Icon(Icons.keyboard_arrow_down),
+          items: agencies.map((String items) {
+            return DropdownMenuItem(
+              value: items,
+              child: Text(items, style: TextStyle(fontFamily: "Gilroy-Regular"),),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(() {
+              dropDownValue = newValue!;
+            });
+          },
         ),
+
         SizedBox(height: 20,),
-        Row(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-              Container(
-                width: width/3,
-                height: 40,
-                padding: EdgeInsets.only(left: 4, right: 2, top: 2, bottom: 0),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(spreadRadius: 1, blurRadius: 4, color: Colors.black26)
-                  ],
-                  color: Colors.white
-                ),
-                child: DropdownButton(
-                  borderRadius: BorderRadius.circular(20),
-                  elevation: 2,
-                  style: TextStyle(color: Colors.black54),
-                  value: dropDownval,
-                  icon: Icon(Icons.keyboard_arrow_down),
-                  items: departure.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(items, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropDownval=newValue!;
-                    });
-                  },
-                ),
-              ),
-
-            Container(
-              width: width/3,
-              height: 40,
-              padding: EdgeInsets.only(left: 4, right: 2, top: 1, bottom:3 ),
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(spreadRadius: 1, blurRadius: 4, color: Colors.black26)
-                  ],
-                  color: Colors.white
-              ),
-              child: DropdownButton(
-
-                borderRadius: BorderRadius.circular(20),
-                elevation: 2,
-                style: TextStyle(color: Colors.black54),
-                value: dropDownV,
-                icon: Icon(Icons.keyboard_arrow_down),
-                items: arrival.map((String items) {
-                  return DropdownMenuItem(
-                    value: items,
-                    child: Text(items, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    dropDownV=newValue!;
-                  });
-                },
-              ),
-            ),
-          ],
-
-
+        Column(
+         children: [
+           FormHelper.dropDownWidget(
+               context,
+               "select departure",
+               this.departureId,
+               this.departure,
+               (onChanged){
+                 this.departureId= onChanged;
+               },
+               (onValidate){
+                 if(onValidate==null){
+                   "please select departure";
+                 }
+                 return null;
+               },
+             borderColor: Theme.of(context).primaryColor,
+             borderFocusColor: Theme.of(context).primaryColor,
+             borderRadius: 10,
+             optionValue: "id",
+             optionLabel: 'label',
+           ),
+           SizedBox(height: Dimensions.height20,),
+           FormHelper.dropDownWidget(
+             context,
+             "select arrival",
+             this.arrivalId,
+             this.arrival,
+                 (onChanged){
+               this.arrivalId= onChanged;
+             },
+                 (onValidate){
+               if(onValidate==null){
+                 "please select arrival";
+               }
+               return null;
+             },
+             borderColor: Theme.of(context).primaryColor,
+             borderFocusColor: Theme.of(context).primaryColor,
+             borderRadius: 10,
+             optionValue: "id",
+             optionLabel: 'label',
+           )
+         ],
         ),
 
         SizedBox(height: 20,),
@@ -263,7 +241,7 @@ class _BusScreenState extends State<BusScreen> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(left: 18),
-                    child: Text("Journey Date", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),),
+                    child: Text("Journey Date", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black, fontFamily: "Gilroy-Regular"),),
                   ),
                   // DateTimeField(
                   //   format: formats,
@@ -327,7 +305,7 @@ class _BusScreenState extends State<BusScreen> {
                               style: TextStyle(
                                   fontSize: 14,
                                   fontFamily:
-                                  'Gilroy-Medium',
+                                  'Gilroy-Regular',
                                   fontWeight:
                                   FontWeight.w400,
                                   color: Theme.of(context)
@@ -364,15 +342,6 @@ class _BusScreenState extends State<BusScreen> {
                 }),
         ),
         SizedBox(height: 20,),
-        Container(
-          decoration: BoxDecoration(
-          ),
-          width: double.maxFinite,
-            height: height/9,
-            child: Image.asset(
-                'images/covid.jpg'
-            ))
-
       ],
     );
   }
@@ -392,6 +361,30 @@ class _PlaneScreenState extends State<PlaneScreen> {
   var agencies = ['Select Airline','Emirates', 'Ghana Airways','Kotoka ITL'];
   String dropDownValue = 'Select Airline';
   bool oneWay = true;
+
+
+  List<dynamic> departure = [];
+
+  String? departureId;
+
+  List<dynamic> arrival = [];
+  String? arrivalId;
+
+  @override
+  void initState(){
+    super.initState();
+
+    this.departure.add({"id":1, "label":"Accra"});
+    this.departure.add({"id":2, "label":"Kumasi"});
+    this.departure.add({"id":3, "label":"Takoradi"});
+
+    this.arrival.add({"id":1, "label":"Accra"});
+    this.arrival.add({"id":2, "label":"Kumasi"});
+    this.arrival.add({"id":3, "label":"Takoradi"});
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     double width =MediaQuery.of(context).size.width;
@@ -408,7 +401,7 @@ class _PlaneScreenState extends State<PlaneScreen> {
           items: agencies.map((String items) {
             return DropdownMenuItem(
               value: items,
-              child: Text(items),
+              child: Text(items, style: TextStyle(fontFamily: "Gilroy-Regular"),),
             );
           }).toList(),
           onChanged: (String? newValue) {
@@ -417,29 +410,48 @@ class _PlaneScreenState extends State<PlaneScreen> {
             });
           },
         ),
-        Card(
-          elevation: 2.0,
-          child: Padding(padding: EdgeInsets.all(8.0),
-            child: Column(
-              children: <Widget>[
-                WidgetComponent.formField(
-                  borders: InputBorder.none,
-                  label: "From",
-                  prefix: Icon(Icons.location_city),
-                  controllers: fromController,
-                ),
-                WidgetComponent.formField(
-                  borders: InputBorder.none,
-                  label: "To",
-                  prefix: Icon(Icons.location_city),
-                  controllers: toController,
-                ),
-                SizedBox(height: 8.0,),
-              ],
-            ),
-          ),
+        FormHelper.dropDownWidget(
+          context,
+          "select departure",
+          this.departureId,
+          this.departure,
+              (onChanged){
+            this.departureId= onChanged;
+          },
+              (onValidate){
+            if(onValidate==null){
+              "please select departure";
+            }
+            return null;
+          },
+          borderColor: Theme.of(context).primaryColor,
+          borderFocusColor: Theme.of(context).primaryColor,
+          borderRadius: 10,
+          optionValue: "id",
+          optionLabel: 'label',
         ),
-        SizedBox(height: 8.0,),
+        SizedBox(height: Dimensions.height20,),
+        FormHelper.dropDownWidget(
+          context,
+          "select arrival",
+          this.arrivalId,
+          this.arrival,
+              (onChanged){
+            this.arrivalId= onChanged;
+          },
+              (onValidate){
+            if(onValidate==null){
+              "please select arrival";
+            }
+            return null;
+          },
+          borderColor: Theme.of(context).primaryColor,
+          borderFocusColor: Theme.of(context).primaryColor,
+          borderRadius: 10,
+          optionValue: "id",
+          optionLabel: 'label',
+        ),
+        SizedBox(height: 20.0,),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -462,7 +474,7 @@ class _PlaneScreenState extends State<PlaneScreen> {
                   color: oneWay? Colors.blueAccent :Colors.white,
                 ),
                 child: Center(
-                  child: Text('One-way', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: oneWay?Colors.white:Colors.black),),
+                  child: Text('One-way', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: oneWay?Colors.white:Colors.black, fontFamily: "Gilroy-Regular"),),
                 ),
               ),
             ),
@@ -484,7 +496,7 @@ class _PlaneScreenState extends State<PlaneScreen> {
                     ]:null
                 ),
                 child: Center(
-                  child: Text('Return trip', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: !oneWay?Colors.white:Colors.black),),
+                  child: Text('Return trip', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: !oneWay?Colors.white:Colors.black, fontFamily: "Gilroy-Regular"),),
                 ),
               ),
             )
@@ -492,7 +504,7 @@ class _PlaneScreenState extends State<PlaneScreen> {
 
         ),
 
-        SizedBox(height: 8.0,),
+        SizedBox(height: 15.0,),
 
         Card(
             elevation: 2.0,
@@ -504,7 +516,7 @@ class _PlaneScreenState extends State<PlaneScreen> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(left: 18),
-                    child: Text("Journey Date"),
+                    child: Text("Journey Date", style: TextStyle(fontFamily: "Gilroy-Regular"),),
                   ),
                   // DateTimeField(
                   //   format: formats,
@@ -568,7 +580,7 @@ class _PlaneScreenState extends State<PlaneScreen> {
                               style: TextStyle(
                                   fontSize: 14,
                                   fontFamily:
-                                  'Gilroy-Medium',
+                                  'Gilroy-Regular',
                                   fontWeight:
                                   FontWeight.w400,
                                   color: Theme.of(context)
@@ -601,7 +613,7 @@ class _PlaneScreenState extends State<PlaneScreen> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(left: 18),
-                      child: Text("Return Date"),
+                      child: Text("Return Date", style: TextStyle(fontFamily: "Gilroy-Regular"),),
                     ),
                     // DateTimeField(
                     //   format: formats,
@@ -665,7 +677,7 @@ class _PlaneScreenState extends State<PlaneScreen> {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontFamily:
-                                    'Gilroy-Medium',
+                                    'Gilroy-Regular',
                                     fontWeight:
                                     FontWeight.w400,
                                     color: Theme.of(context)

@@ -39,6 +39,7 @@ dependencies:
   ticket_widget: ^0.0.1
   barcode_widget: ^2.0.2
   get: ^4.6.5
+  snippet_coder_utils: ^1.0.12
 
 dev_dependencies:
   flutter_test:

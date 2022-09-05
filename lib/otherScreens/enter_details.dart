@@ -23,7 +23,7 @@ class _EnterDetailsState extends State<EnterDetails> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Enter details'),
+        title: Text('Enter details', style: TextStyle(fontFamily: "Gilroy-Regular"),),
         centerTitle: true,
         leading: InkWell(
             onTap: (){
@@ -34,7 +34,7 @@ class _EnterDetailsState extends State<EnterDetails> {
 
       body: ListView(
         children: [
-          Padding(padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          Padding(padding: EdgeInsets.symmetric(horizontal: 20, vertical: 40),
           child: Column(
             children: [
               buildTextField(Icons.add, 'First name', 'First name', false, false, false, firstNameTEC),
@@ -46,86 +46,7 @@ class _EnterDetailsState extends State<EnterDetails> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                 //  Text("Journey Date", style: TextStyle(color: Theme.of(context).textTheme.bodyText2?.color,fontWeight: FontWeight.w600,fontSize: 14 )),
-                  // DateTimeField(
-                  //   format: formats,
-                  //   onShowPicker: (context, currentValue) {
-                  //     return showDatePicker(
-                  //         context: context,
-                  //         initialDate: currentValue ?? DateTime.now(),
-                  //         firstDate: DateTime(1970), lastDate: DateTime(2119));
-                  //   },
-                  //   onChanged: (dates) {
-                  //     setState(() {
-                  //       journeys = dates;
-                  //     });
-                  //   },
-                  //   decoration: InputDecoration(
-                  //       border: InputBorder.none,
-                  //       prefixIcon: Icon(Icons.date_range),
-                  //       suffixIcon: FlatButton(onPressed: (){
-                  //         setState(() {
-                  //           journeys = DateTime.now();
-                  //         });
-                  //       }, child: Text("Today"))
-                  //   ),
-                  // ),
-                  //date time picker
-                  // SizedBox(height: 8,),
-                  // InkWell(
-                  //   onTap:()async{
-                  //     final initialDate = DateTime.now();
-                  //     final newDate = await showDatePicker(
-                  //         context: context,
-                  //         initialDate: initialDate,
-                  //         firstDate: DateTime(DateTime.now().year - 30),
-                  //         lastDate: DateTime(DateTime.now().year + 30));
-                  //     if (newDate == null) return;
-                  //     setState(() {
-                  //       date = newDate;
-                  //     });
-                  //     print(date);
-                  //
-                  //
-                  //   },
-                  //   child: Container(
-                  //     decoration: BoxDecoration(
-                  //         border: Border.all(
-                  //             color: HexColor('e0e0e0')
-                  //         ),
-                  //         borderRadius: BorderRadius.circular(8)
-                  //     ),
-                  //     height: 48,
-                  //
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.symmetric(
-                  //           horizontal: 20),
-                  //       child: Row(
-                  //         mainAxisAlignment:
-                  //         MainAxisAlignment
-                  //             .spaceBetween,
-                  //         children: [
-                  //           Text(
-                  //             date == null
-                  //                 ? 'dd/mm/yy'
-                  //                 : '${date?.day}/${date?.month}/${date?.year}',
-                  //             style: TextStyle(
-                  //                 fontSize: 14,
-                  //                 fontFamily:
-                  //                 'Gilroy-Medium',
-                  //                 fontWeight:
-                  //                 FontWeight.w400,
-                  //                 color: Theme.of(context)
-                  //                     .textTheme
-                  //                     .caption
-                  //                     ?.color,
-                  //                 letterSpacing: -0.1),
-                  //           )
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+
 
                 ],
               ),
