@@ -5,6 +5,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:theo/admin_user_panel/admin_user_panel.dart';
 import 'package:theo/dashboard.dart';
 import 'package:theo/splash_login/splash_screen.dart';
+import 'package:theo/test/test.dart';
 import 'Routes/route_helper.dart';
 import 'admin/admin_sign_up.dart';
 import 'components/color.dart';
@@ -31,6 +32,9 @@ import 'helper/dependencies.dart' as dep;
 // }
 
 Future<void> main() async {
+  // AuthService authService = AuthService();
+  // var responseBody = await authService.registration("jamal", "nasir", "jamal@gmail.com", "12345");
+  // print(responseBody);
   WidgetsFlutterBinding.ensureInitialized();
   await dep.init();
   runApp(MyApp());
