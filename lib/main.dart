@@ -32,9 +32,9 @@ import 'helper/dependencies.dart' as dep;
 // }
 
 Future<void> main() async {
-  // AuthService authService = AuthService();
-  // var responseBody = await authService.registration("jamal", "nasir", "jamal@gmail.com", "12345");
-  // print(responseBody);
+  AuthService authService = AuthService();
+  var responseBody = await authService.registration("abdallah", "saeed", "imama@gmail.com", "1234");
+  print(responseBody);
   WidgetsFlutterBinding.ensureInitialized();
   await dep.init();
   runApp(MyApp());
