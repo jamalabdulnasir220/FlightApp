@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -13,11 +14,11 @@ class AuthService {
   Future<String> registration(String firstname, String lastname, String email, String password) async {
 
     var response = await http.post(registrationUri, body: {
-    "first_name":firstname,
-    "last_name": lastname,
-    "email":email,
-    "password":password,
-  });
+      "first_name":firstname,
+      "last_name": lastname,
+      "email":email,
+      "password":password,
+    });
     return response.body;
-}
+  }
 }
