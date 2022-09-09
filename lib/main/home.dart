@@ -1,7 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
+import 'package:theo/data/api/backend_api.dart';
+import 'package:theo/model/search_trip.dart';
+import 'package:theo/model/trip.dart';
 import 'package:theo/otherScreens/select_bus.dart';
 import 'package:theo/otherScreens/select_flight.dart';
+import 'package:theo/style.dart';
 
 import '../components/color.dart';
 import '../components/widget_component.dart';
@@ -16,17 +22,13 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-
-
   bool bus = true;
-
 
   // final formats = DateFormat("yyyy-MM-dd");
   DateTime? journeys;
 
-  void fetchDate(){
+  void fetchDate() {
     //todo: add the fetch data logic
-
   }
 
   @override
@@ -36,72 +38,87 @@ class HomeState extends State<Home> {
     // TODO: implement build
     return Scaffold(
       resizeToAvoidBottomInset: false,
-
       body: ListView(
         padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 25.0),
         children: <Widget>[
           Container(
-              height: height/9,
-              child: Image.asset('images/easygo.png')),
-          const SizedBox(height: 20,),
+              height: height / 9, child: Image.asset('images/easygo.png')),
+          const SizedBox(
+            height: 20,
+          ),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               InkWell(
-                onTap: (){
-                  if(mounted){
-                    setState((){
+                onTap: () {
+                  if (mounted) {
+                    setState(() {
                       bus = true;
                     });
                   }
                 },
                 child: Container(
-                  width: width/3,
+                  width: width / 3,
                   height: 40,
                   decoration: BoxDecoration(
                     boxShadow: [
-                      BoxShadow(spreadRadius: 1, blurRadius: 4, color: Colors.black26)
+                      BoxShadow(
+                          spreadRadius: 1, blurRadius: 4, color: Colors.black26)
                     ],
-                    color: bus? Colors.blueAccent :Colors.white,
+                    color: bus ? Colors.blueAccent : Colors.white,
                   ),
                   child: Center(
-                    child: Text('Bus', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: bus?Colors.white:Colors.black, fontFamily: "Gilroy-Regular"),),
+                    child: Text(
+                      'Bus',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: bus ? Colors.white : Colors.black,
+                          fontFamily: "Gilroy-Regular"),
+                    ),
                   ),
                 ),
               ),
               InkWell(
-                onTap: (){
-                  if(mounted){
-                    setState((){
+                onTap: () {
+                  if (mounted) {
+                    setState(() {
                       bus = false;
                     });
                   }
                 },
                 child: Container(
-                  width: width/3,
+                  width: width / 3,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: !bus? Colors.blueAccent :Colors.white,
-                    boxShadow: [
-                      BoxShadow(spreadRadius: 1, blurRadius: 4, color: Colors.black26)
-                    ]
-                  ),
+                      color: !bus ? Colors.blueAccent : Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                            spreadRadius: 1,
+                            blurRadius: 4,
+                            color: Colors.black26)
+                      ]),
                   child: Center(
-                    child: Text('Airplane', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: !bus?Colors.white:Colors.black, fontFamily: "Gilroy-Regular"),),
+                    child: Text(
+                      'Airplane',
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: !bus ? Colors.white : Colors.black,
+                          fontFamily: "Gilroy-Regular"),
+                    ),
                   ),
                 ),
               )
             ],
-
           ),
-          SizedBox(height: 20,),
-          if(bus)
-            BusScreen(),
+          SizedBox(
+            height: 20,
+          ),
+          if (bus) BusScreen(),
 
-          if(!bus)
-            PlaneScreen()
-
+          if (!bus) PlaneScreen()
 
           // Text("Prefered Bus",
           //   style: TextStyle(
@@ -115,11 +132,9 @@ class HomeState extends State<Home> {
           //       fontSize: 16.0),
           // ),
         ],
-      ) ,
-    
+      ),
     );
   }
-
 }
 
 class BusScreen extends StatefulWidget {
@@ -131,33 +146,41 @@ class BusScreen extends StatefulWidget {
 
 class _BusScreenState extends State<BusScreen> {
   DateTime? date;
-   var agencies = ['Select Agency','VIP Agency', 'STC Agency','Metro Mass'];
-   String dropDownValue = 'Select Agency';
+  List<String> agencies = [
+    'Select',
+    'VIP',
+    'Theo transport',
+    'Metro Mass',
+    'KPS',
+    'STC'
+  ];
+  late String dropDownValue;
 
-  List<dynamic> departure = [];
+  List<dynamic> departures = ["Accra", "Kumasi", "Takoradi"];
+  String? source;
 
   String? departureId;
 
-  List<dynamic> arrival = [];
+  List<dynamic> arrivals = ["Accra", "Kumasi", "Takoradi"];
   String? arrivalId;
+  SearchTrip searchTrip = SearchTrip();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
+    dropDownValue = agencies.first;
 
-    this.departure.add({"id":1, "label":"Accra"});
-    this.departure.add({"id":2, "label":"Kumasi"});
-    this.departure.add({"id":3, "label":"Takoradi"});
+    // this.departure.add({"id": 1, "label": "Accra"});
+    // this.departure.add({"id": 2, "label": "Kumasi"});
+    // this.departure.add({"id": 3, "label": "Takoradi"});
 
-    this.arrival.add({"id":1, "label":"Accra"});
-    this.arrival.add({"id":2, "label":"Kumasi"});
-    this.arrival.add({"id":3, "label":"Takoradi"});
+    // this.arrival.add({"id": 1, "label": "Accra"});
+    // this.arrival.add({"id": 2, "label": "Kumasi"});
+    // this.arrival.add({"id": 3, "label": "Takoradi"});
   }
-
 
   @override
   Widget build(BuildContext context) {
-
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Column(
@@ -165,71 +188,84 @@ class _BusScreenState extends State<BusScreen> {
         // SizedBox(
         //   width: MediaQuery.of(context).size.width,
         //     child: Text('Where do you want to travel to?', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 25),)),
-        DropdownButton(
+        DropdownButton<String>(
           style: TextStyle(color: Colors.black),
           value: dropDownValue,
           icon: const Icon(Icons.keyboard_arrow_down),
           items: agencies.map((String items) {
-            return DropdownMenuItem(
+            return DropdownMenuItem<String>(
               value: items,
-              child: Text(items, style: TextStyle(fontFamily: "Gilroy-Regular"),),
+              child: Text(
+                items,
+                style: TextStyle(fontFamily: "Gilroy-Regular"),
+              ),
             );
           }).toList(),
           onChanged: (String? newValue) {
             setState(() {
               dropDownValue = newValue!;
+              // searchTrip.agencyId = int.parse(newValue);
+              log(searchTrip.agencyId.toString());
             });
           },
         ),
 
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         Column(
-         children: [
-           FormHelper.dropDownWidget(
-               context,
-               "select departure",
-               this.departureId,
-               this.departure,
-               (onChanged){
-                 this.departureId= onChanged;
-               },
-               (onValidate){
-                 if(onValidate==null){
-                   "please select departure";
-                 }
-                 return null;
-               },
-             borderColor: Theme.of(context).primaryColor,
-             borderFocusColor: Theme.of(context).primaryColor,
-             borderRadius: 10,
-             optionValue: "id",
-             optionLabel: 'label',
-           ),
-           SizedBox(height: Dimensions.height20,),
-           FormHelper.dropDownWidget(
-             context,
-             "select arrival",
-             this.arrivalId,
-             this.arrival,
-                 (onChanged){
-               this.arrivalId= onChanged;
-             },
-                 (onValidate){
-               if(onValidate==null){
-                 "please select arrival";
-               }
-               return null;
-             },
-             borderColor: Theme.of(context).primaryColor,
-             borderFocusColor: Theme.of(context).primaryColor,
-             borderRadius: 10,
-             optionValue: "id",
-             optionLabel: 'label',
-           )
-         ],
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: DropdownButtonFormField<String>(
+                value: source,
+                decoration: dropDownDecoration(hintText: "Select depature"),
+                items: departures
+                    .map(
+                      (dep) => DropdownMenuItem<String>(
+                        value: dep,
+                        child: Text(
+                          dep,
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 13),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (val) {
+                  searchTrip.source = val;
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: DropdownButtonFormField<String>(
+                value: source,
+                decoration: dropDownDecoration(hintText: "Select arrival"),
+                items: departures
+                    .map(
+                      (dep) => DropdownMenuItem<String>(
+                        value: dep,
+                        child: Text(
+                          dep,
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 13),
+                        ),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (val) {
+                  searchTrip.dest = val;
+                },
+              ),
+            ),
+            SizedBox(
+              height: Dimensions.height20,
+            ),
+          ],
         ),
 
-        SizedBox(height: 20,),
+        const SizedBox(height: 20),
 
         Card(
             elevation: 2.0,
@@ -241,7 +277,15 @@ class _BusScreenState extends State<BusScreen> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(left: 18),
-                    child: Text("Journey Date", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black, fontFamily: "Gilroy-Regular"),),
+                    child: Text(
+                      "Journey Date",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
+                        fontFamily: "Gilroy-Regular",
+                      ),
+                    ),
                   ),
                   // DateTimeField(
                   //   format: formats,
@@ -268,7 +312,7 @@ class _BusScreenState extends State<BusScreen> {
                   // ),
                   //date time picker
                   InkWell(
-                    onTap:()async{
+                    onTap: () async {
                       final initialDate = DateTime.now();
                       final newDate = await showDatePicker(
                           context: context,
@@ -278,25 +322,20 @@ class _BusScreenState extends State<BusScreen> {
                       if (newDate == null) return;
                       setState(() {
                         date = newDate;
+                        searchTrip.date = newDate.toString().substring(0, 10);
+                        // log(newDate.toString().substring(0, 11));
                       });
                       print(date);
-
-
                     },
                     child: Container(
                       height: 48,
                       decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.white10),
-                          borderRadius:
-                          BorderRadius.circular(8)),
+                          border: Border.all(color: Colors.white10),
+                          borderRadius: BorderRadius.circular(8)),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment
-                              .spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               date == null
@@ -304,10 +343,8 @@ class _BusScreenState extends State<BusScreen> {
                                   : '${date?.day}/${date?.month}/${date?.year}',
                               style: TextStyle(
                                   fontSize: 14,
-                                  fontFamily:
-                                  'Gilroy-Regular',
-                                  fontWeight:
-                                  FontWeight.w400,
+                                  fontFamily: 'Gilroy-Regular',
+                                  fontWeight: FontWeight.w400,
                                   color: Theme.of(context)
                                       .textTheme
                                       .caption
@@ -319,29 +356,37 @@ class _BusScreenState extends State<BusScreen> {
                       ),
                     ),
                   ),
-
                 ],
               ),
-            )
+            )),
+        SizedBox(
+          height: 50,
         ),
-        SizedBox(height: 50,),
 
         Container(
           height: 50,
-            width: MediaQuery.of(context).size.width/1.5,
-            child: WidgetComponent.buttons("Search Bus",
-                size: 18,
-                textColor : Colors.white,
-                bolds: FontWeight.w500,
-                elevas: 2.0,
-                radius: 20.0,
-                padding: EdgeInsets.symmetric(vertical: 10),
-                coloring: Colours.magenta,
-                onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder:(_)=>SelectBus()));
-                }),
+          width: MediaQuery.of(context).size.width / 1.5,
+          child: WidgetComponent.buttons(
+            "Search Bus",
+            size: 18,
+            textColor: Colors.white,
+            bolds: FontWeight.w500,
+            elevas: 2.0,
+            radius: 20.0,
+            padding: EdgeInsets.symmetric(vertical: 10),
+            coloring: Colours.magenta,
+            onPressed: () async {
+              try {
+                List<Trip> trips = await BackendApi.searchTrip(searchTrip);
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => SelectBus(trips: trips)));
+              } catch (e) {
+                //TODO: show error dialog
+              }
+            },
+          ),
         ),
-        SizedBox(height: 20,),
+        SizedBox(height: 20),
       ],
     );
   }
@@ -358,10 +403,9 @@ class _PlaneScreenState extends State<PlaneScreen> {
   TextEditingController fromController = new TextEditingController();
   TextEditingController toController = new TextEditingController();
   DateTime? date;
-  var agencies = ['Select Airline','Emirates', 'Ghana Airways','Kotoka ITL'];
+  var agencies = ['Select Airline', 'Emirates', 'Ghana Airways', 'Kotoka ITL'];
   String dropDownValue = 'Select Airline';
   bool oneWay = true;
-
 
   List<dynamic> departure = [];
 
@@ -371,25 +415,22 @@ class _PlaneScreenState extends State<PlaneScreen> {
   String? arrivalId;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
-    this.departure.add({"id":1, "label":"Accra"});
-    this.departure.add({"id":2, "label":"Kumasi"});
-    this.departure.add({"id":3, "label":"Takoradi"});
+    this.departure.add({"id": 1, "label": "Accra"});
+    this.departure.add({"id": 2, "label": "Kumasi"});
+    this.departure.add({"id": 3, "label": "Takoradi"});
 
-    this.arrival.add({"id":1, "label":"Accra"});
-    this.arrival.add({"id":2, "label":"Kumasi"});
-    this.arrival.add({"id":3, "label":"Takoradi"});
+    this.arrival.add({"id": 1, "label": "Accra"});
+    this.arrival.add({"id": 2, "label": "Kumasi"});
+    this.arrival.add({"id": 3, "label": "Takoradi"});
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-    double width =MediaQuery.of(context).size.width;
+    double width = MediaQuery.of(context).size.width;
     return Column(
-
       children: [
         // SizedBox(
         //   width: MediaQuery.of(context).size.width,
@@ -401,7 +442,10 @@ class _PlaneScreenState extends State<PlaneScreen> {
           items: agencies.map((String items) {
             return DropdownMenuItem(
               value: items,
-              child: Text(items, style: TextStyle(fontFamily: "Gilroy-Regular"),),
+              child: Text(
+                items,
+                style: TextStyle(fontFamily: "Gilroy-Regular"),
+              ),
             );
           }).toList(),
           onChanged: (String? newValue) {
@@ -410,101 +454,129 @@ class _PlaneScreenState extends State<PlaneScreen> {
             });
           },
         ),
-        FormHelper.dropDownWidget(
-          context,
-          "select departure",
-          this.departureId,
-          this.departure,
-              (onChanged){
-            this.departureId= onChanged;
-          },
-              (onValidate){
-            if(onValidate==null){
-              "please select departure";
-            }
-            return null;
-          },
-          borderColor: Theme.of(context).primaryColor,
-          borderFocusColor: Theme.of(context).primaryColor,
-          borderRadius: 10,
-          optionValue: "id",
-          optionLabel: 'label',
+        // FormHelper.dropDownWidget(
+        //   context,
+        //   "select departure",
+        //   this.departureId,
+        //   this.departure,
+        //   (onChanged) {
+        //     this.departureId = onChanged;
+        //   },
+        //   (onValidate) {
+        //     if (onValidate == null) {
+        //       "please select departure";
+        //     }
+        //     return null;
+        //   },
+        //   borderColor: Theme.of(context).primaryColor,
+        //   borderFocusColor: Theme.of(context).primaryColor,
+        //   borderRadius: 10,
+        //   optionValue: "id",
+        //   optionLabel: 'label',
+        // ),
+        SizedBox(
+          height: Dimensions.height20,
         ),
-        SizedBox(height: Dimensions.height20,),
-        FormHelper.dropDownWidget(
-          context,
-          "select arrival",
-          this.arrivalId,
-          this.arrival,
-              (onChanged){
-            this.arrivalId= onChanged;
-          },
-              (onValidate){
-            if(onValidate==null){
-              "please select arrival";
-            }
-            return null;
-          },
-          borderColor: Theme.of(context).primaryColor,
-          borderFocusColor: Theme.of(context).primaryColor,
-          borderRadius: 10,
-          optionValue: "id",
-          optionLabel: 'label',
+        // FormHelper.dropDownWidget(
+        //   context,
+        //   "select arrival",
+        //   this.arrivalId,
+        //   this.arrival,
+        //   (onChanged) {
+        //     this.arrivalId = onChanged;
+        //   },
+        //   (onValidate) {
+        //     if (onValidate == null) {
+        //       "please select arrival";
+        //     }
+        //     return null;
+        //   },
+        //   borderColor: Theme.of(context).primaryColor,
+        //   borderFocusColor: Theme.of(context).primaryColor,
+        //   borderRadius: 10,
+        //   optionValue: "id",
+        //   optionLabel: 'label',
+        // ),
+        SizedBox(
+          height: 20.0,
         ),
-        SizedBox(height: 20.0,),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
-              onTap: (){
-                if(mounted){
-                  setState((){
+              onTap: () {
+                if (mounted) {
+                  setState(() {
                     oneWay = true;
                   });
                 }
               },
               child: Container(
-                width: width/3,
+                width: width / 3,
                 height: 40,
                 decoration: BoxDecoration(
-                  boxShadow: oneWay?[
-                  BoxShadow(spreadRadius: 1, blurRadius: 4, color: Colors.black26)
-                  ]:null,
-                  color: oneWay? Colors.blueAccent :Colors.white,
+                  boxShadow: oneWay
+                      ? [
+                          BoxShadow(
+                              spreadRadius: 1,
+                              blurRadius: 4,
+                              color: Colors.black26)
+                        ]
+                      : null,
+                  color: oneWay ? Colors.blueAccent : Colors.white,
                 ),
                 child: Center(
-                  child: Text('One-way', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: oneWay?Colors.white:Colors.black, fontFamily: "Gilroy-Regular"),),
+                  child: Text(
+                    'One-way',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: oneWay ? Colors.white : Colors.black,
+                        fontFamily: "Gilroy-Regular"),
+                  ),
                 ),
               ),
             ),
             InkWell(
-              onTap: (){
-                if(mounted){
-                  setState((){
+              onTap: () {
+                if (mounted) {
+                  setState(() {
                     oneWay = false;
                   });
                 }
               },
               child: Container(
-                width: width/3,
+                width: width / 3,
                 height: 40,
                 decoration: BoxDecoration(
-                    color: !oneWay? Colors.blueAccent :Colors.white,
-                    boxShadow: !oneWay?[
-                      BoxShadow(spreadRadius: 1, blurRadius: 4, color: Colors.black26)
-                    ]:null
-                ),
+                    color: !oneWay ? Colors.blueAccent : Colors.white,
+                    boxShadow: !oneWay
+                        ? [
+                            BoxShadow(
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                color: Colors.black26)
+                          ]
+                        : null),
                 child: Center(
-                  child: Text('Return trip', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: !oneWay?Colors.white:Colors.black, fontFamily: "Gilroy-Regular"),),
+                  child: Text(
+                    'Return trip',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: !oneWay ? Colors.white : Colors.black,
+                        fontFamily: "Gilroy-Regular"),
+                  ),
                 ),
               ),
             )
           ],
-
         ),
 
-        SizedBox(height: 15.0,),
+        SizedBox(
+          height: 15.0,
+        ),
 
         Card(
             elevation: 2.0,
@@ -516,7 +588,10 @@ class _PlaneScreenState extends State<PlaneScreen> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.only(left: 18),
-                    child: Text("Journey Date", style: TextStyle(fontFamily: "Gilroy-Regular"),),
+                    child: Text(
+                      "Journey Date",
+                      style: TextStyle(fontFamily: "Gilroy-Regular"),
+                    ),
                   ),
                   // DateTimeField(
                   //   format: formats,
@@ -543,7 +618,7 @@ class _PlaneScreenState extends State<PlaneScreen> {
                   // ),
                   //date time picker
                   InkWell(
-                    onTap:()async{
+                    onTap: () async {
                       final initialDate = DateTime.now();
                       final newDate = await showDatePicker(
                           context: context,
@@ -555,23 +630,16 @@ class _PlaneScreenState extends State<PlaneScreen> {
                         date = newDate;
                       });
                       print(date);
-
-
                     },
                     child: Container(
                       height: 48,
                       decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.white10),
-                          borderRadius:
-                          BorderRadius.circular(8)),
+                          border: Border.all(color: Colors.white10),
+                          borderRadius: BorderRadius.circular(8)),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment
-                              .spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               date == null
@@ -579,10 +647,8 @@ class _PlaneScreenState extends State<PlaneScreen> {
                                   : '${date?.day}/${date?.month}/${date?.year}',
                               style: TextStyle(
                                   fontSize: 14,
-                                  fontFamily:
-                                  'Gilroy-Regular',
-                                  fontWeight:
-                                  FontWeight.w400,
+                                  fontFamily: 'Gilroy-Regular',
+                                  fontWeight: FontWeight.w400,
                                   color: Theme.of(context)
                                       .textTheme
                                       .caption
@@ -594,15 +660,14 @@ class _PlaneScreenState extends State<PlaneScreen> {
                       ),
                     ),
                   ),
-
                 ],
               ),
-            )
-        ),
+            )),
 
-        if(!oneWay)...[
-          SizedBox(height: 8.0,),
-
+        if (!oneWay) ...[
+          SizedBox(
+            height: 8.0,
+          ),
           Card(
               elevation: 2.0,
               child: Padding(
@@ -613,7 +678,10 @@ class _PlaneScreenState extends State<PlaneScreen> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(left: 18),
-                      child: Text("Return Date", style: TextStyle(fontFamily: "Gilroy-Regular"),),
+                      child: Text(
+                        "Return Date",
+                        style: TextStyle(fontFamily: "Gilroy-Regular"),
+                      ),
                     ),
                     // DateTimeField(
                     //   format: formats,
@@ -640,7 +708,7 @@ class _PlaneScreenState extends State<PlaneScreen> {
                     // ),
                     //date time picker
                     InkWell(
-                      onTap:()async{
+                      onTap: () async {
                         final initialDate = DateTime.now();
                         final newDate = await showDatePicker(
                             context: context,
@@ -652,23 +720,16 @@ class _PlaneScreenState extends State<PlaneScreen> {
                           date = newDate;
                         });
                         print(date);
-
-
                       },
                       child: Container(
                         height: 48,
                         decoration: BoxDecoration(
-                            border: Border.all(
-                                color: Colors.white10),
-                            borderRadius:
-                            BorderRadius.circular(8)),
+                            border: Border.all(color: Colors.white10),
+                            borderRadius: BorderRadius.circular(8)),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment
-                                .spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 date == null
@@ -676,10 +737,8 @@ class _PlaneScreenState extends State<PlaneScreen> {
                                     : '${date?.day}/${date?.month}/${date?.year}',
                                 style: TextStyle(
                                     fontSize: 14,
-                                    fontFamily:
-                                    'Gilroy-Regular',
-                                    fontWeight:
-                                    FontWeight.w400,
+                                    fontFamily: 'Gilroy-Regular',
+                                    fontWeight: FontWeight.w400,
                                     color: Theme.of(context)
                                         .textTheme
                                         .caption
@@ -691,35 +750,32 @@ class _PlaneScreenState extends State<PlaneScreen> {
                         ),
                       ),
                     ),
-
                   ],
                 ),
-              )
-          ),
+              )),
         ],
-        SizedBox(height: 50,),
+        SizedBox(
+          height: 50,
+        ),
 
         Container(
           height: 50,
-          width: MediaQuery.of(context).size.width/1.5,
+          width: MediaQuery.of(context).size.width / 1.5,
           child: WidgetComponent.buttons("Search Flight",
-              textColor : Colors.white,
+              textColor: Colors.white,
               bolds: FontWeight.bold,
               elevas: 2.0,
               radius: 20.0,
               padding: EdgeInsets.symmetric(vertical: 10),
-              coloring: Colours.magenta,
-              onPressed: (){
-                Navigator.of(context).push(MaterialPageRoute(builder:(_)=>SelectFlight()));
-              }),
+              coloring: Colours.magenta, onPressed: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => SelectFlight()));
+          }),
         ),
-        SizedBox(height: 50,),
-
-
+        SizedBox(
+          height: 50,
+        ),
       ],
     );
   }
 }
-
-
-
