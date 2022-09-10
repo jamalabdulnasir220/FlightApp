@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:ticket_widget/ticket_widget.dart';
 
-
 class BusTicketScreen extends StatefulWidget {
   const BusTicketScreen({Key? key}) : super(key: key);
 
@@ -23,8 +22,8 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
       ),
       body: ListView(
         children: [
-
-          Padding(padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -32,53 +31,88 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width/2.5),
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 2.5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Bus number',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),),
-                          SizedBox(height: 10,),
-                          Text('GS-22345-5435',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),),
+                          Text(
+                            'Bus number',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'GS-22345-5435',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w400),
+                          ),
                         ],
                       ),
                     ),
                     Container(
-                      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width/2.5),
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 2.5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Agency',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, fontFamily: "Gilroy-Regular"),),
-                          SizedBox(height: 10,),
-                          Text('Metro Mass',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),),
+                          Text(
+                            'Agency',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w800,
+                                fontFamily: "Gilroy-Regular"),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Metro Mass',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w400),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width/2.5),
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width / 2.5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Total price',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),),
-                          SizedBox(height: 10,),
-                          Text('GHC 500.00',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),),
+                          Text(
+                            'Total price',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w800),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'GHC 500.00',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w400),
+                          ),
                         ],
                       ),
                     ),
                   ],
                 ),
 
-
-
-                SizedBox(height: 20,),
-
-
+                SizedBox(
+                  height: 20,
+                ),
 
                 // flignt ticket
                 Container(
@@ -86,8 +120,7 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                   margin: EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                       color: HexColor('#2B5AB5'),
-                      borderRadius: BorderRadius.circular(20)
-                  ),
+                      borderRadius: BorderRadius.circular(20)),
                   child: TicketWidget(
                     width: 350,
                     height: 250,
@@ -101,13 +134,18 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   decoration: BoxDecoration(
                       color: HexColor('#ffffff'),
-                      borderRadius: BorderRadius.circular(20)
-                  ),
+                      borderRadius: BorderRadius.circular(20)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Bus Journey',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),),
-                      SizedBox(height: 20,),
+                      Text(
+                        'Bus Journey',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w800),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Container(
                         height: 150,
                         child: Row(
@@ -120,27 +158,51 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('20:00',style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),),
-                                    Text('Thu, 1 Apr',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: HexColor('#A0A0A0')),),
-
+                                    Text(
+                                      '20:00',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                    Text(
+                                      'Thu, 1 Apr',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: HexColor('#A0A0A0')),
+                                    ),
                                   ],
                                 ),
                                 Column(
                                   children: [
-                                    Text('5:00 Hrs',style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: HexColor('#2B5AB5')),),
-
+                                    Text(
+                                      '5:00 Hrs',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w800,
+                                          color: HexColor('#2B5AB5')),
+                                    ),
                                   ],
                                 ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text('01:20',style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),),
-                                    Text('Thu, 1 Apr',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: HexColor('#A0A0A0')),),
-
+                                    Text(
+                                      '01:20',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                    Text(
+                                      'Thu, 1 Apr',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: HexColor('#A0A0A0')),
+                                    ),
                                   ],
                                 ),
                               ],
-
                             ),
                             Row(
                               children: [
@@ -149,33 +211,38 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                                     Padding(
                                       padding: const EdgeInsets.only(left: 11),
                                       child: Column(
-                                        children: List.generate(height~/30, (index) => Expanded(
-                                          child: Container(
-                                            color: index%2==0?Colors.transparent
-                                                :Colors.grey[300],
-                                            width: 2,
-                                          ),
-                                        )),
+                                        children: List.generate(
+                                            height ~/ 30,
+                                            (index) => Expanded(
+                                                  child: Container(
+                                                    color: index % 2 == 0
+                                                        ? Colors.transparent
+                                                        : Colors.grey[300],
+                                                    width: 2,
+                                                  ),
+                                                )),
                                       ),
                                     ),
                                     Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(
                                           width: 25,
                                           height: 25,
                                           decoration: BoxDecoration(
                                               color: HexColor('#2B5AB5'),
-                                              borderRadius: BorderRadius.circular(30)
-                                          ),
-                                          child:  Center(
+                                              borderRadius:
+                                                  BorderRadius.circular(30)),
+                                          child: Center(
                                             child: Container(
                                               width: 15,
                                               height: 15,
                                               decoration: BoxDecoration(
                                                   color: HexColor('#ffffff'),
-                                                  borderRadius: BorderRadius.circular(20)
-                                              ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20)),
                                             ),
                                           ),
                                         ),
@@ -184,45 +251,54 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                                           height: 25,
                                           decoration: BoxDecoration(
                                               color: HexColor('#2B5AB5'),
-                                              borderRadius: BorderRadius.circular(30)
-                                          ),
+                                              borderRadius:
+                                                  BorderRadius.circular(30)),
                                         ),
-
                                       ],
                                     ),
                                   ],
                                 ),
-                                SizedBox(width: 10,),
+                                SizedBox(
+                                  width: 10,
+                                ),
                                 Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text('Kuamsi',style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),),
+                                        Text(
+                                          'Kuamsi',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w800),
+                                        ),
                                         // Text('Kumasi Airport',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: HexColor('#A0A0A0')),),
-
                                       ],
                                     ),
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text('Accra',style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),),
+                                        Text(
+                                          'Accra',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w800),
+                                        ),
                                         // Text('Kotoka Airport',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: HexColor('#A0A0A0')),),
-
                                       ],
                                     ),
                                   ],
-
                                 ),
                               ],
                             ),
                           ],
                         ),
                       )
-
-
                     ],
                   ),
                 ),
@@ -234,7 +310,6 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
     );
   }
 }
-
 
 class TicketData extends StatelessWidget {
   const TicketData({
@@ -257,16 +332,23 @@ class TicketData extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text('Full Name',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.grey)),
+                    Text('Full Name',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.grey)),
                   ],
                 ),
-                SizedBox(height: 10,),
-
                 SizedBox(
-                    width: MediaQuery.of(context).size.width/3.5,
-                    child: Text('Baba Jamal Nasir Abdul',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),)),
-
-
+                  height: 10,
+                ),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width / 3.5,
+                    child: Text(
+                      'Baba Jamal Nasir Abdul',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                    )),
               ],
             ),
             Column(
@@ -274,28 +356,38 @@ class TicketData extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text('Seat Place',style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: Colors.grey)),
+                    Text('Seat Place',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w800,
+                            color: Colors.grey)),
                   ],
                 ),
-                SizedBox(height: 10,),
-
                 SizedBox(
-                    width: MediaQuery.of(context).size.width/3.5,
-                    child: Text('Seat 7',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),)),
-
-
+                  height: 10,
+                ),
+                SizedBox(
+                    width: MediaQuery.of(context).size.width / 3.5,
+                    child: Text(
+                      'Seat 7',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                    )),
               ],
             ),
           ],
         ),
         Row(
-          children: List.generate(width~/10, (index) => Expanded(
-            child: Container(
-              color: index%2==0?Colors.transparent
-                  :Colors.grey[300],
-              height: 1,
-            ),
-          )),
+          children: List.generate(
+              width ~/ 10,
+              (index) => Expanded(
+                    child: Container(
+                      color: index % 2 == 0
+                          ? Colors.transparent
+                          : Colors.grey[300],
+                      height: 1,
+                    ),
+                  )),
         ),
         Container(
           height: 70,
@@ -303,12 +395,11 @@ class TicketData extends StatelessWidget {
             child: BarcodeWidget(
               barcode: Barcode.code128(), // Barcode type and settings
               data: 'Booking Code G459FG54', //
-              width: 200,// Content
+              width: 200, // Content
               height: 70,
             ),
           ),
         )
-
       ],
     );
   }

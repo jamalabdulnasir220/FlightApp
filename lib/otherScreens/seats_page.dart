@@ -5,6 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:theo/data/api/backend_api.dart';
 import 'package:theo/model/seat.dart';
 import 'package:theo/otherScreens/enter_details.dart';
+import 'package:theo/otherScreens/payment_method.dart';
 import '../components/flight_model.dart';
 
 class SeatsGridPage extends StatefulWidget {
@@ -203,8 +204,25 @@ class _SeatsGridPageState extends State<SeatsGridPage> {
                             ),
                           );
                         } else {
-                          await BackendApi.bookTrip(
+                          dynamic bookingId = await BackendApi.bookTrip(
                               widget.tripId, seatsSelected);
+                          if (bookingId != null) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => PaymentMethod(
+                                  bookingId: bookingId,
+                                  amount: widget.price * (seatsSelected.length),
+                                  flight: widget.flight,
+                                ),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Coudn't book trip, try again"),
+                              ),
+                            );
+                          }
                           // Navigator.of(context).push(
                           //   MaterialPageRoute(
                           //     builder: (_) => EnterDetails(
@@ -224,9 +242,10 @@ class _SeatsGridPageState extends State<SeatsGridPage> {
                           child: Text(
                             'Continue',
                             style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),

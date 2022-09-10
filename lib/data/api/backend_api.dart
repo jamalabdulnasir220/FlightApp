@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:http/http.dart';
 import 'package:theo/model/search_trip.dart';
 import 'package:theo/model/seat.dart';
+import 'package:theo/model/ticket.dart';
 import 'package:theo/model/trip.dart';
 
 class BackendApi {
@@ -135,24 +136,64 @@ class BackendApi {
 
   static getFlightAgencies() {}
 
-  static bookTrip(tripId, seatIds) async {
+  static Future<dynamic> bookTrip(tripId, seatIds) async {
     Response res = await post(
       Uri.parse("$_domain/book-trip/"),
       headers: headers,
       body: jsonEncode(
         {
           "trip": tripId,
-          "seat": seatIds,
+          "seats": seatIds,
           'user': _userId,
         },
       ),
     );
-    if (res.statusCode == 200) {
+    if (res.statusCode == 201) {
+      log(jsonDecode(res.body).toString());
+      Map results = jsonDecode(res.body);
+      List resList = jsonDecode(results['booking']);
+      log(resList.first['pk'].toString());
       log("bookTrip successfull");
-      return true;
+      return resList.first['pk'];
     } else {
       log("bookTrip Error: ${res.statusCode} ${res.body}");
       return false;
+    }
+  }
+
+  static makePayment({phone, amount = 1, bookingId, network = "VOD"}) async {
+    Response res = await post(Uri.parse("$_domain/pay-for-trip/"),
+        headers: headers,
+        body: jsonEncode({
+          "network": network,
+          'source_phone': phone,
+          'amount': amount,
+          'booking': bookingId,
+        }));
+
+    if (res.statusCode == 200) {
+      log("makePayment successfull");
+    } else {
+      log("makePayment Error: ${res.statusCode}");
+    }
+  }
+
+  static Future<List<Ticket>> getTickets() async {
+    Response res = await post(
+      Uri.parse("$_domain/user-tickets/"),
+      headers: headers,
+      body: jsonEncode(
+        {'user': _userId},
+      ),
+    );
+
+    if (res.statusCode == 200) {
+      log("getTicets successful");
+      List ticketsData = jsonDecode(res.body);
+      return ticketsData.map((tic) => Ticket.fromMap(tic)).toList();
+    } else {
+      log("getTickets Error: ${res.statusCode}");
+      throw "getTickets Error";
     }
   }
 }
