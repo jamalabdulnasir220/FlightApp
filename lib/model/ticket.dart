@@ -1,27 +1,56 @@
+
 class Ticket {
     Ticket({
-        this.id,
+        this.user,
+        this.agency,
+        this.vehicleNumber,
+        this.bookingCode,
+        this.source,
+        this.destination,
+        this.date,
+        this.time,
+        this.seats,
+        this.amount,
         this.ticketId,
-        // this.dateCreated,
-        this.transaction,
     });
 
-    int? id;
+    String? user;
+    String? agency;
+    String? vehicleNumber;
+    String? bookingCode;
+    String? source;
+    String? destination;
+    DateTime? date;
+    String? time;
+    String? seats;
+    double? amount;
     String? ticketId;
-    // DateTime? dateCreated;
-    int? transaction;
 
     factory Ticket.fromMap(Map<String, dynamic> json) => Ticket(
-        id: json["id"],
+        user: json["user"],
+        agency: json["agency"],
+        vehicleNumber: json["vehicle_number"],
+        bookingCode: json["booking_code"],
+        source: json["source"],
+        destination: json["destination"],
+        date: DateTime.parse(json["date"]),
+        time: json["time"],
+        seats: json["seats"],
+        amount: json["amount"],
         ticketId: json["ticket_id"],
-        // dateCreated: DateTime.parse(json["date_created"]),
-        transaction: json["transaction"],
     );
 
-    Map<String, dynamic> toMap() => {
-        "id": id,
-        "ticket_id": ticketId,
-        // "date_created": dateCreated.toIso8601String(),
-        "transaction": transaction,
-    };
+    // Map<String, dynamic> toMap() => {
+    //     "user": user,
+    //     "agency": agency,
+    //     "vehicle_number": vehicleNumber,
+    //     "booking_code": bookingCode,
+    //     "source": source,
+    //     "destination": destination,
+    //     "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
+    //     "time": time,
+    //     "seats": seats,
+    //     "amount": amount,
+    //     "ticket_id": ticketId,
+    // };
 }

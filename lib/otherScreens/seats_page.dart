@@ -27,7 +27,7 @@ class _SeatsGridPageState extends State<SeatsGridPage> {
   List<int> seatsSelected = [];
   int seatTotal = 50;
   double price = 48.00;
-  List unavailableSeats = [1, 3, 6, 9, 15, 18, 20, 11, 13];
+  bool isLoading = false;
 
   getSeatNumbers() {
     List<String> seatNumbers;
@@ -204,6 +204,9 @@ class _SeatsGridPageState extends State<SeatsGridPage> {
                             ),
                           );
                         } else {
+                          setState(() {
+                            isLoading = true;
+                          });
                           dynamic bookingId = await BackendApi.bookTrip(
                               widget.tripId, seatsSelected);
                           if (bookingId != null) {
@@ -223,6 +226,9 @@ class _SeatsGridPageState extends State<SeatsGridPage> {
                               ),
                             );
                           }
+                          setState(() {
+                            isLoading = false;
+                          });
                           // Navigator.of(context).push(
                           //   MaterialPageRoute(
                           //     builder: (_) => EnterDetails(
@@ -239,14 +245,18 @@ class _SeatsGridPageState extends State<SeatsGridPage> {
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.blueAccent),
                         child: Center(
-                          child: Text(
-                            'Continue',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                            ),
-                          ),
+                          child: isLoading
+                              ? CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  'Continue',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16,
+                                  ),
+                                ),
                         ),
                       ),
                     )

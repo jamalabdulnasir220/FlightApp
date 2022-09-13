@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:theo/EasyGoIcons.dart';
 import 'package:theo/data/api/backend_api.dart';
+import 'package:theo/model/ticket.dart';
 import 'package:theo/otherScreens/bus_ticket_screen.dart';
 import 'package:theo/otherScreens/flight_ticket_screen.dart';
 
@@ -186,20 +187,20 @@ class _PaymentMethodState extends State<PaymentMethod> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                   child: InkWell(
                     onTap: () async {
                       // await BackendApi.makePayment(
                       //   phone: phone,
                       //   // amount: widget.amount, // TODO: uncomment
                       //   bookingId: widget.bookingId,
-                      //   // network: mtn ? "MTN" : "VOD", // TODO: uncomment
+                      //   network: mtn ? "MTN" : "VOD", // TODO: uncomment
                       // );
-                      await BackendApi.getTickets();
+                      Ticket ticket = await BackendApi.getTicket(4);
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => widget.flight
-                              ? FlightTicketScreen()
-                              : BusTicketScreen()));
+                          builder: (_) => BusTicketScreen(
+                                ticket: ticket,
+                              )));
                     },
                     child: Container(
                       width: width,

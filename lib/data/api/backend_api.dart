@@ -15,8 +15,8 @@ class BackendApi {
   static Map<String, String> headers = {'content-type': "application/json"};
 
   static Future<bool> login({
-    String email = "test@gmail.com",
-    String password = "theo",
+    String email = "admin@gmail.com",
+    String password = "password",
   }) async {
     Response res = await post(
       Uri.parse("$_domain/login/"),
@@ -194,6 +194,35 @@ class BackendApi {
     } else {
       log("getTickets Error: ${res.statusCode}");
       throw "getTickets Error";
+    }
+  }
+
+  static getTicket(transId) async {
+    Response res = await post(
+      Uri.parse("$_domain/get-ticket/"),
+      headers: headers,
+      body: jsonEncode(
+        {'transaction_id': "I62CV8MS92G0"},
+      ),
+    );
+
+    if (res.statusCode == 200) {
+      log("getTicket successful");
+      Map<String, dynamic> ticketData = jsonDecode(res.body)['ticket_data'];
+      return Ticket.fromMap(ticketData);
+    } else {
+      log("getTicket Error ${res.statusCode}");
+    }
+  }
+
+  static getLocations() async {
+    Response res =
+        await get(Uri.parse("$_domain/locations/"), headers: headers);
+
+    if (res.statusCode == 200) {
+      log("getLocations Successfull");
+    } else {
+      log("getLocations Error ${res.statusCode}");
     }
   }
 }

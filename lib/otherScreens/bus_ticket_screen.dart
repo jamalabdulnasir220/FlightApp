@@ -1,10 +1,15 @@
+import 'dart:developer';
+
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:theo/model/ticket.dart';
 import 'package:ticket_widget/ticket_widget.dart';
 
 class BusTicketScreen extends StatefulWidget {
-  const BusTicketScreen({Key? key}) : super(key: key);
+  final Ticket ticket;
+  const BusTicketScreen({Key? key, required this.ticket}) : super(key: key);
 
   @override
   State<BusTicketScreen> createState() => _BusTicketScreenState();
@@ -18,12 +23,12 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
       backgroundColor: HexColor('#F2F4F8'),
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Bus Ticket"),
+        title: const Text("Trip Ticket"),
       ),
       body: ListView(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -36,16 +41,21 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Bus number',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w800),
+                          GestureDetector(
+                            onTap: () {
+                              log(widget.ticket.seats!);
+                            },
+                            child: Text(
+                              'Vehicle number',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w800),
+                            ),
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           Text(
-                            'GS-22345-5435',
+                            widget.ticket.vehicleNumber ?? "~",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w400),
                           ),
@@ -69,7 +79,7 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                             height: 10,
                           ),
                           Text(
-                            'Metro Mass',
+                            widget.ticket.agency ?? "~",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w400),
                           ),
@@ -78,9 +88,7 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,7 +108,7 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                             height: 10,
                           ),
                           Text(
-                            'GHC 500.00',
+                            widget.ticket.amount.toString(),
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w400),
                           ),
@@ -110,14 +118,13 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                   ],
                 ),
 
-                SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
 
                 // flignt ticket
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  margin: EdgeInsets.only(bottom: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  margin: const EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                       color: HexColor('#2B5AB5'),
                       borderRadius: BorderRadius.circular(20)),
@@ -125,28 +132,33 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                     width: 350,
                     height: 250,
                     isCornerRounded: true,
-                    padding: EdgeInsets.all(20),
-                    child: TicketData(),
+                    padding: const EdgeInsets.all(20),
+                    child: TicketData(
+                      name: widget.ticket.user!,
+                      seats: widget.ticket.seats!,
+                      bookingCode: widget.ticket.bookingCode!,
+                    ),
                   ),
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   decoration: BoxDecoration(
                       color: HexColor('#ffffff'),
                       borderRadius: BorderRadius.circular(20)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Bus Journey',
+                      const Text(
+                        'Trip',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w800),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
+                      const SizedBox(height: 20),
                       SizedBox(
-                        height: 20,
-                      ),
-                      Container(
                         height: 150,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,22 +171,34 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '20:00',
+                                      widget.ticket.time! + ' GMT',
                                       style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.w800),
                                     ),
                                     Text(
-                                      'Thu, 1 Apr',
+                                      formatDate(widget.ticket.date!,
+                                          [D, ", ", dd, " ", M]),
                                       style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: HexColor('#A0A0A0')),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: HexColor('#A0A0A0'),
+                                      ),
                                     ),
                                   ],
                                 ),
                                 Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
+                                    const Text(
+                                      'Estimated Duration',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w800),
+                                    ),
+                                    SizedBox(height: 15),
                                     Text(
                                       '5:00 Hrs',
                                       style: TextStyle(
@@ -184,24 +208,25 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                                     ),
                                   ],
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '01:20',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w800),
-                                    ),
-                                    Text(
-                                      'Thu, 1 Apr',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: HexColor('#A0A0A0')),
-                                    ),
-                                  ],
-                                ),
+                                // Column(
+                                //   crossAxisAlignment: CrossAxisAlignment.start,
+                                //   children: [
+                                //     Text(
+                                //       widget.ticket.time!,
+                                //       style: TextStyle(
+                                //           fontSize: 18,
+                                //           fontWeight: FontWeight.w800),
+                                //     ),
+                                //     Text(
+                                //       formatDate(widget.ticket.date!,
+                                //           [D, ", ", dd, " ", M]),
+                                //       style: TextStyle(
+                                //           fontSize: 16,
+                                //           fontWeight: FontWeight.w500,
+                                //           color: HexColor('#A0A0A0')),
+                                //     ),
+                                //   ],
+                                // ),
                               ],
                             ),
                             Row(
@@ -212,15 +237,16 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                                       padding: const EdgeInsets.only(left: 11),
                                       child: Column(
                                         children: List.generate(
-                                            height ~/ 30,
-                                            (index) => Expanded(
-                                                  child: Container(
-                                                    color: index % 2 == 0
-                                                        ? Colors.transparent
-                                                        : Colors.grey[300],
-                                                    width: 2,
-                                                  ),
-                                                )),
+                                          height ~/ 30,
+                                          (index) => Expanded(
+                                            child: Container(
+                                              color: index % 2 == 0
+                                                  ? Colors.transparent
+                                                  : Colors.grey[300],
+                                              width: 2,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     Column(
@@ -271,7 +297,7 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Kuamsi',
+                                          widget.ticket.source ?? '~',
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w800),
@@ -284,7 +310,7 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Accra',
+                                          widget.ticket.destination ?? '~',
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w800),
@@ -312,7 +338,13 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
 }
 
 class TicketData extends StatelessWidget {
-  const TicketData({
+  String name;
+  String seats;
+  String bookingCode;
+  TicketData({
+    this.name = "John Doe",
+    this.seats = "7",
+    this.bookingCode = 'G459FG54',
     Key? key,
   }) : super(key: key);
 

@@ -4,7 +4,7 @@ class SearchTrip {
   String? dest;
   int? agencyId;
 
-  SearchTrip({this.agencyId = 5});
+  SearchTrip({this.agencyId = 1});
 
   toMap() => {
         'date': date,
