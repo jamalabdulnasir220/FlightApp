@@ -19,319 +19,335 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: HexColor('#F2F4F8'),
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text("Trip Ticket"),
-      ),
-      body: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width / 2.5),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              log(widget.ticket.seats!);
-                            },
-                            child: Text(
-                              'Vehicle number',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w800),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            widget.ticket.vehicleNumber ?? "~",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width / 2.5),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Agency',
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w800,
-                                fontFamily: "Gilroy-Regular"),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            widget.ticket.agency ?? "~",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width / 2.5),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Total price',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w800),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            widget.ticket.amount.toString(),
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 20),
-
-                // flignt ticket
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  margin: const EdgeInsets.only(bottom: 20),
-                  decoration: BoxDecoration(
-                      color: HexColor('#2B5AB5'),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: TicketWidget(
-                    width: 350,
-                    height: 250,
-                    isCornerRounded: true,
-                    padding: const EdgeInsets.all(20),
-                    child: TicketData(
-                      name: widget.ticket.user!,
-                      seats: widget.ticket.seats!,
-                      bookingCode: widget.ticket.bookingCode!,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  decoration: BoxDecoration(
-                      color: HexColor('#ffffff'),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context)
+          ..pop()
+          ..pop()
+          ..pop()
+          ..pop();
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: HexColor('#F2F4F8'),
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("Trip Ticket"),
+          automaticallyImplyLeading: false,
+        ),
+        body: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Trip',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        height: 150,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Container(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width / 2.5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      widget.ticket.time! + ' GMT',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w800),
-                                    ),
-                                    Text(
-                                      formatDate(widget.ticket.date!,
-                                          [D, ", ", dd, " ", M]),
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: HexColor('#A0A0A0'),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Estimated Duration',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w800),
-                                    ),
-                                    SizedBox(height: 15),
-                                    Text(
-                                      '5:00 Hrs',
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w800,
-                                          color: HexColor('#2B5AB5')),
-                                    ),
-                                  ],
-                                ),
-                                // Column(
-                                //   crossAxisAlignment: CrossAxisAlignment.start,
-                                //   children: [
-                                //     Text(
-                                //       widget.ticket.time!,
-                                //       style: TextStyle(
-                                //           fontSize: 18,
-                                //           fontWeight: FontWeight.w800),
-                                //     ),
-                                //     Text(
-                                //       formatDate(widget.ticket.date!,
-                                //           [D, ", ", dd, " ", M]),
-                                //       style: TextStyle(
-                                //           fontSize: 16,
-                                //           fontWeight: FontWeight.w500,
-                                //           color: HexColor('#A0A0A0')),
-                                //     ),
-                                //   ],
-                                // ),
-                              ],
+                            GestureDetector(
+                              onTap: () {
+                                log(widget.ticket.seats!);
+                              },
+                              child: Text(
+                                widget.ticket.tripType! + ' number',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w800),
+                              ),
                             ),
-                            Row(
-                              children: [
-                                Stack(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 11),
-                                      child: Column(
-                                        children: List.generate(
-                                          height ~/ 30,
-                                          (index) => Expanded(
-                                            child: Container(
-                                              color: index % 2 == 0
-                                                  ? Colors.transparent
-                                                  : Colors.grey[300],
-                                              width: 2,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          width: 25,
-                                          height: 25,
-                                          decoration: BoxDecoration(
-                                              color: HexColor('#2B5AB5'),
-                                              borderRadius:
-                                                  BorderRadius.circular(30)),
-                                          child: Center(
-                                            child: Container(
-                                              width: 15,
-                                              height: 15,
-                                              decoration: BoxDecoration(
-                                                  color: HexColor('#ffffff'),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20)),
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          width: 25,
-                                          height: 25,
-                                          decoration: BoxDecoration(
-                                              color: HexColor('#2B5AB5'),
-                                              borderRadius:
-                                                  BorderRadius.circular(30)),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          widget.ticket.source ?? '~',
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                        // Text('Kumasi Airport',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: HexColor('#A0A0A0')),),
-                                      ],
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          widget.ticket.destination ?? '~',
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w800),
-                                        ),
-                                        // Text('Kotoka Airport',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: HexColor('#A0A0A0')),),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              widget.ticket.vehicleNumber ?? "~",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w400),
                             ),
                           ],
                         ),
-                      )
+                      ),
+                      Container(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width / 2.5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Agency',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                  fontFamily: "Gilroy-Regular"),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              widget.ticket.agency ?? "~",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 20),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width / 2.5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Total price',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w800),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              widget.ticket.amount.toString(),
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // flignt ticket
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    margin: const EdgeInsets.only(bottom: 20),
+                    decoration: BoxDecoration(
+                        color: HexColor('#2B5AB5'),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: TicketWidget(
+                      width: 350,
+                      height: 250,
+                      isCornerRounded: true,
+                      padding: const EdgeInsets.all(20),
+                      child: TicketData(
+                        name: widget.ticket.user!,
+                        seats: widget.ticket.seats!,
+                        bookingCode: widget.ticket.bookingCode!,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
+                    decoration: BoxDecoration(
+                        color: HexColor('#ffffff'),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Trip',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          height: 150,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.ticket.time! + ' GMT',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      Text(
+                                        formatDate(widget.ticket.date!,
+                                            [D, ", ", dd, " ", M]),
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: HexColor('#A0A0A0'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Estimated Duration',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w800),
+                                      ),
+                                      SizedBox(height: 15),
+                                      Text(
+                                        '5:00 Hrs',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w800,
+                                            color: HexColor('#2B5AB5')),
+                                      ),
+                                    ],
+                                  ),
+                                  // Column(
+                                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                                  //   children: [
+                                  //     Text(
+                                  //       widget.ticket.time!,
+                                  //       style: TextStyle(
+                                  //           fontSize: 18,
+                                  //           fontWeight: FontWeight.w800),
+                                  //     ),
+                                  //     Text(
+                                  //       formatDate(widget.ticket.date!,
+                                  //           [D, ", ", dd, " ", M]),
+                                  //       style: TextStyle(
+                                  //           fontSize: 16,
+                                  //           fontWeight: FontWeight.w500,
+                                  //           color: HexColor('#A0A0A0')),
+                                  //     ),
+                                  //   ],
+                                  // ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 11),
+                                        child: Column(
+                                          children: List.generate(
+                                            height ~/ 30,
+                                            (index) => Expanded(
+                                              child: Container(
+                                                color: index % 2 == 0
+                                                    ? Colors.transparent
+                                                    : Colors.grey[300],
+                                                width: 2,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Container(
+                                            width: 25,
+                                            height: 25,
+                                            decoration: BoxDecoration(
+                                                color: HexColor('#2B5AB5'),
+                                                borderRadius:
+                                                    BorderRadius.circular(30)),
+                                            child: Center(
+                                              child: Container(
+                                                width: 15,
+                                                height: 15,
+                                                decoration: BoxDecoration(
+                                                    color: HexColor('#ffffff'),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            width: 25,
+                                            height: 25,
+                                            decoration: BoxDecoration(
+                                                color: HexColor('#2B5AB5'),
+                                                borderRadius:
+                                                    BorderRadius.circular(30)),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            widget.ticket.source ?? '~',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          // Text('Kumasi Airport',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: HexColor('#A0A0A0')),),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            widget.ticket.destination ?? '~',
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w800),
+                                          ),
+                                          // Text('Kotoka Airport',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: HexColor('#A0A0A0')),),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

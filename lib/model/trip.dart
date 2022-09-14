@@ -10,14 +10,14 @@ String tripToMap(Trip data) => json.encode(data.toMap());
 
 class Trip {
   Trip({
-    this.id,
-    this.source,
-    this.destination,
+    this.id = 1,
+    this.source = "Accra",
+    this.destination = "Kumasi",
     this.date,
     this.time,
     this.dateCreated,
     this.vehicle,
-    this.price,
+    this.price = "25",
   });
 
   int? id;

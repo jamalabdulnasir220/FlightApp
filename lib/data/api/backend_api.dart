@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart';
+import 'package:theo/model/agency.dart';
+import 'package:theo/model/category.dart';
 import 'package:theo/model/search_trip.dart';
 import 'package:theo/model/seat.dart';
 import 'package:theo/model/ticket.dart';
@@ -15,8 +17,8 @@ class BackendApi {
   static Map<String, String> headers = {'content-type': "application/json"};
 
   static Future<bool> login({
-    String email = "admin@gmail.com",
-    String password = "password",
+    String email = "stc1@gmail.com",
+    String password = "1234567",
   }) async {
     Response res = await post(
       Uri.parse("$_domain/login/"),
@@ -134,7 +136,54 @@ class BackendApi {
   //   }
   // }
 
-  static getFlightAgencies() {}
+  static Future<List<Category>> getCategories() async {
+    Response res = await get(
+      Uri.parse("$_domain/categories/"),
+      headers: headers,
+    );
+
+    if (res.statusCode == 200) {
+      log("getCategories Successfull");
+      List catData = jsonDecode(res.body);
+      return catData.map((e) => Category.fromMap(e)).toList();
+    } else {
+      log("getCategories Error");
+      throw res.body;
+    }
+  }
+
+  static Future<List<Agency>> getAgencies({catId = 1}) async {
+    Response res = await post(
+      Uri.parse("$_domain/all-agencies/"),
+      headers: headers,
+      body: jsonEncode({"category": catId}),
+    );
+
+    if (res.statusCode == 200) {
+      log("getAgencies Successfull");
+      List agencyData = jsonDecode(res.body);
+      return agencyData.map((e) => Agency.fromMap(e)).toList();
+    } else {
+      log("getAgencies Error");
+      throw res.body;
+    }
+  }
+
+  static Future<List<String>> getLocations() async {
+    Response res = await get(
+      Uri.parse("$_domain/locations/"),
+      headers: headers,
+    );
+
+    if (res.statusCode == 200) {
+      log("getLocation successful");
+      List result = jsonDecode(res.body)['locations'];
+      return <String>[...result];
+    } else {
+      log("getLocations Error: ${res.statusCode}");
+      throw res.body;
+    }
+  }
 
   static Future<dynamic> bookTrip(tripId, seatIds) async {
     Response res = await post(
@@ -215,14 +264,19 @@ class BackendApi {
     }
   }
 
-  static getLocations() async {
-    Response res =
-        await get(Uri.parse("$_domain/locations/"), headers: headers);
+  static getUserTickets() async {
+    Response res = await post(
+      Uri.parse("$_domain/user-tickets/"),
+      headers: headers,
+      body: jsonEncode(
+        {'user': _userId},
+      ),
+    );
 
     if (res.statusCode == 200) {
-      log("getLocations Successfull");
+      log("getUserTickets Success");
     } else {
-      log("getLocations Error ${res.statusCode}");
+      log("getUserTickets Error ${res.statusCode}");
     }
   }
 }

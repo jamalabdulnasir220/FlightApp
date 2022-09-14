@@ -2,11 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:theo/data/api/backend_api.dart';
+import 'package:theo/model/agency.dart';
+import 'package:theo/model/category.dart';
 import 'package:theo/model/search_trip.dart';
 import 'package:theo/model/trip.dart';
-import 'package:theo/otherScreens/flight_ticket_screen.dart';
 import 'package:theo/otherScreens/select_bus.dart';
-import 'package:theo/otherScreens/select_flight.dart';
 import 'package:theo/style.dart';
 
 import '../components/color.dart';
@@ -21,158 +21,140 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  bool bus = true;
+  List<Category>? cats = [];
   bool isLoading = false;
 
   // final formats = DateFormat("yyyy-MM-dd");
   DateTime? journeys;
   DateTime? date;
-  List<String> flightAgencies = [
-    'Select',
-    'Emirates',
-    'Ghana Airways',
-    'Kotoka ITL',
-  ];
-  List<String> busAgencies = [
-    'Select',
-    'VIP',
-    'Theo transport',
-    'Metro Mass',
-    'KPS',
-    'STC'
-  ];
-  late String selectedAgency;
-
-  List<dynamic> departures = ["Accra", "Kumasi", "Takoradi"];
+  int? selectedAgencyId = null;
+  late Category selectedCat;
   String? source;
-
-  String? departureId;
-
-  List<dynamic> arrivals = ["Accra", "Kumasi", "Takoradi"];
+  List<String> locations = [];
   String? arrivalId;
   SearchTrip searchTrip = SearchTrip();
-
-  void fetchDate() {
-    //todo: add the fetch data logic
-  }
 
   @override
   void initState() {
     super.initState();
-    selectedAgency = busAgencies.first;
+    getDatas();
+  }
+
+  getDatas() async {
+    cats = [];
+    setState(() {});
+    try {
+      cats = await BackendApi.getCategories();
+      selectedCat = cats!.first;
+      searchTrip.catId = selectedCat.id;
+      for (Category cat in cats!) {
+        cat.agencies = await BackendApi.getAgencies(catId: cat.id);
+      }
+      locations = await BackendApi.getLocations();
+    } catch (e) {
+      log(e.toString());
+      cats = null;
+    }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    // TODO: implement build
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: ListView(
-        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 25.0),
-        children: <Widget>[
-          Container(
-              height: height / 9, child: Image.asset('images/easygo.png')),
-          const SizedBox(
-            height: 20,
-          ),
+      body: cats == null
+          ? Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    getDatas();
+                  },
+                  child: Text("Reload")),
+            )
+          : cats!.isEmpty
+              ? const Center(
+                  child: CircularProgressIndicator(color: Colors.blue),
+                )
+              : ListView(
+                  padding:
+                      const EdgeInsets.only(left: 10.0, right: 10.0, top: 25.0),
+                  children: <Widget>[
+                    SizedBox(
+                        height: height / 9,
+                        child: Image.asset('images/easygo.png')),
+                    const SizedBox(height: 20),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                onTap: () {
-                  if (mounted) {
-                    selectedAgency = "Select";
-                    setState(() {
-                      bus = true;
-                    });
-                  }
-                },
-                child: Container(
-                  width: width / 3,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    boxShadow: const [
-                      BoxShadow(
-                          spreadRadius: 1, blurRadius: 4, color: Colors.black26)
-                    ],
-                    color: bus ? Colors.blueAccent : Colors.white,
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Bus',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: bus ? Colors.white : Colors.black,
-                        fontFamily: "Gilroy-Regular",
+                    SizedBox(
+                      height: 40,
+                      width: double.infinity,
+                      child: ListView(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        scrollDirection: Axis.horizontal,
+                        children: cats!.map((e) => catItem(width, e)).toList(),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 20),
+                    agancySelector(),
+                    const SizedBox(height: 20),
+                    depAndArivSelectors(),
+                    const SizedBox(height: 20),
+                    dateSelector(context),
+                    const SizedBox(height: 50),
+                    searchButton(context),
+                    const SizedBox(height: 20),
+                    // if (bus) BusScreen(),
+
+                    // if (!bus) PlaneScreen()
+
+                    // Text("Prefered Bus",
+                    //   style: TextStyle(
+                    //       fontWeight: FontWeight.w500,
+                    //       fontSize: 16.0),
+                    // ),
+                    //
+                    // Text("Favorite Bus",
+                    //   style: TextStyle(
+                    //       fontWeight: FontWeight.w500,
+                    //       fontSize: 16.0),
+                    // ),
+                  ],
                 ),
-              ),
-              InkWell(
-                onTap: () {
-                  if (mounted) {
-                    selectedAgency = "Select";
-                    setState(() {
-                      bus = false;
-                    });
-                  }
-                },
-                child: Container(
-                  width: width / 3,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      color: !bus ? Colors.blueAccent : Colors.white,
-                      boxShadow: const [
-                        BoxShadow(
-                            spreadRadius: 1,
-                            blurRadius: 4,
-                            color: Colors.black26)
-                      ]),
-                  child: Center(
-                    child: Text(
-                      'Airplane',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: !bus ? Colors.white : Colors.black,
-                        fontFamily: "Gilroy-Regular",
-                      ),
-                    ),
-                  ),
-                ),
-              )
-            ],
+    );
+  }
+
+  Widget catItem(double width, Category cat) {
+    return GestureDetector(
+      onTap: () {
+        if (mounted) {
+          selectedAgencyId = null;
+          setState(() {
+            selectedCat = cat;
+            searchTrip.catId = cat.id;
+          });
+        }
+      },
+      child: Container(
+        width: width / 3,
+        margin: EdgeInsets.only(right: 30),
+        height: 40,
+        decoration: BoxDecoration(
+          boxShadow: const [
+            BoxShadow(spreadRadius: 1, blurRadius: 4, color: Colors.black26)
+          ],
+          color: selectedCat.id == cat.id ? Colors.blueAccent : Colors.white,
+        ),
+        child: Center(
+          child: Text(
+            cat.name ?? "~",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: selectedCat.id == cat.id ? Colors.white : Colors.black,
+              fontFamily: "Gilroy-Regular",
+            ),
           ),
-          const SizedBox(height: 20),
-          agancySelector(),
-          const SizedBox(height: 20),
-          depAndArivSelectors(),
-          const SizedBox(height: 20),
-          dateSelector(context),
-          const SizedBox(height: 50),
-          searchButton(context),
-          const SizedBox(height: 20),
-          // if (bus) BusScreen(),
-
-          // if (!bus) PlaneScreen()
-
-          // Text("Prefered Bus",
-          //   style: TextStyle(
-          //       fontWeight: FontWeight.w500,
-          //       fontSize: 16.0),
-          // ),
-          //
-          // Text("Favorite Bus",
-          //   style: TextStyle(
-          //       fontWeight: FontWeight.w500,
-          //       fontSize: 16.0),
-          // ),
-        ],
+        ),
       ),
     );
   }
@@ -180,25 +162,25 @@ class HomeState extends State<Home> {
   Widget agancySelector() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: DropdownButton<String>(
+      child: DropdownButton<int?>(
         isExpanded: true,
         style: const TextStyle(color: Colors.black),
-        value: selectedAgency,
+        value: selectedAgencyId,
+        hint: Text("Select Agency"),
         icon: const Icon(Icons.keyboard_arrow_down),
-        items: (bus ? busAgencies : flightAgencies).map((String items) {
-          return DropdownMenuItem<String>(
-            value: items,
+        items: selectedCat.agencies!.map((Agency agency) {
+          return DropdownMenuItem<int>(
+            value: agency.id,
             child: Text(
-              items,
+              agency.name!,
               style: const TextStyle(fontFamily: "Gilroy-Regular"),
             ),
           );
         }).toList(),
-        onChanged: (String? newValue) {
+        onChanged: (int? newValue) {
           setState(() {
-            selectedAgency = newValue!;
-            // searchTrip.agencyId = int.parse(newValue);
-            log(searchTrip.agencyId.toString());
+            selectedAgencyId = newValue;
+            searchTrip.agencyId = newValue;
           });
         },
       ),
@@ -213,7 +195,7 @@ class HomeState extends State<Home> {
           child: DropdownButtonFormField<String>(
             value: source,
             decoration: dropDownDecoration(hintText: "Select depature"),
-            items: departures
+            items: locations
                 .map(
                   (dep) => DropdownMenuItem<String>(
                     value: dep,
@@ -234,7 +216,7 @@ class HomeState extends State<Home> {
           child: DropdownButtonFormField<String>(
             value: source,
             decoration: dropDownDecoration(hintText: "Select arrival"),
-            items: departures
+            items: locations
                 .map(
                   (dep) => DropdownMenuItem<String>(
                     value: dep,
@@ -288,7 +270,7 @@ class HomeState extends State<Home> {
                 setState(() {
                   date = newDate;
                   searchTrip.date = newDate.toString().substring(0, 10);
-                  // log(newDate.toString().substring(0, 11));
+                  log(newDate.toString().substring(0, 11));
                 });
                 print(date);
               },
@@ -346,7 +328,10 @@ class HomeState extends State<Home> {
             if (trips.isNotEmpty) {
               if (!mounted) return;
               Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => SelectBus(trips: trips)));
+                MaterialPageRoute(
+                  builder: (_) => SelectBus(trips: trips),
+                ),
+              );
             } else {
               if (!mounted) return;
               ScaffoldMessenger.of(context)

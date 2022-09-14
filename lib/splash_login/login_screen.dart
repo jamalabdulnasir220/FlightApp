@@ -8,12 +8,20 @@ import '../Routes/route_helper.dart';
 import '../components/app_text_field.dart';
 import '../dimensions/dimensions.dart';
 
-class LoginScreen extends StatelessWidget {
-  // TextEditingController userNameController = TextEditingController();
-  // TextEditingController passwordController = TextEditingController();
-  String email = "";
-  String password = "";
+class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  // TextEditingController userNameController = TextEditingController();
+  String email = "";
+
+  String password = "";
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +73,8 @@ class LoginScreen extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () async {
-                  //TODO: uncomment to activate login
+                  isLoading = true;
+                  setState(() {});
                   bool success = await BackendApi.login();
                   if (success) {
                     await BackendApi.getUserProfile();
@@ -73,6 +82,8 @@ class LoginScreen extends StatelessWidget {
                   } else {
                     //TODO: show error message
                   }
+                  isLoading = false;
+                  setState(() {});
                   // Get.toNamed(RouteHelper.dashBoard);
                 },
                 child: Container(
@@ -86,13 +97,16 @@ class LoginScreen extends StatelessWidget {
                     color: Colors.lightBlue,
                   ),
                   child: Center(
-                    child: Text(
-                      'Login',
-                      style: TextStyle(
-                          fontSize: Dimensions.font20 + Dimensions.font20 / 2,
-                          color: Colors.white,
-                          fontFamily: "Gilroy-Regular"),
-                    ),
+                    child: isLoading
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            'Login',
+                            style: TextStyle(
+                                fontSize:
+                                    Dimensions.font20 + Dimensions.font20 / 2,
+                                color: Colors.white,
+                                fontFamily: "Gilroy-Regular"),
+                          ),
                   ),
                 ),
               ),
