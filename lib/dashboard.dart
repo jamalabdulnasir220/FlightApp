@@ -77,9 +77,6 @@ class DashboardState extends State<Dashboard> {
           onTap: (int index) {
             setState(() {
               page = index;
-              if (index == 1) {
-                BackendApi.getUserTickets();
-              }
             });
           },
           type: BottomNavigationBarType.fixed,
@@ -91,7 +88,15 @@ class DashboardState extends State<Dashboard> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline), label: "Help"),
           ]),
-      body: currentpages(page!),
+      // body: currentpages(page!),
+      body: IndexedStack(
+        index: page,
+        children: [
+          Home(),
+          MyBooking(),
+          Help(),
+        ],
+      ),
     );
   }
 }

@@ -417,7 +417,7 @@ class TicketData extends StatelessWidget {
                 SizedBox(
                     width: MediaQuery.of(context).size.width / 3.5,
                     child: Text(
-                      'Seat 7',
+                      'Seat ${seats}',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
                     )),

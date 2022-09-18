@@ -60,7 +60,7 @@ class _SeatsGridPageState extends State<SeatsGridPage> {
           ListView(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Column(
                   children: [
                     // row with the legend
@@ -68,7 +68,7 @@ class _SeatsGridPageState extends State<SeatsGridPage> {
 
                     Container(
                       color: Colors.white,
-                      margin: EdgeInsets.only(top: 20),
+                      margin: const EdgeInsets.only(top: 20),
                       padding:
                           EdgeInsets.symmetric(horizontal: 40, vertical: 40),
                       height: (height / 2),

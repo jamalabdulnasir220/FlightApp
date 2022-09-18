@@ -30,7 +30,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Payment method'),
+        title: const Text('Payment method'),
         centerTitle: true,
         leading: InkWell(
           onTap: () {
@@ -187,15 +187,16 @@ class _PaymentMethodState extends State<PaymentMethod> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                   child: InkWell(
                     onTap: () async {
-                      // await BackendApi.makePayment(
-                      //   phone: phone,
-                      //   // amount: widget.amount, // TODO: uncomment
-                      //   bookingId: widget.bookingId,
-                      //   network: mtn ? "MTN" : "VOD", // TODO: uncomment
-                      // );
+                      await BackendApi.makePayment(
+                        phone: phone,
+                        // amount: widget.amount, // TODO: uncomment
+                        bookingId: widget.bookingId,
+                        network: mtn ? "MTN" : "VOD",
+                      );
                       Ticket ticket = await BackendApi.getTicket(4);
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (_) => BusTicketScreen(

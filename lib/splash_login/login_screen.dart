@@ -75,12 +75,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTap: () async {
                   isLoading = true;
                   setState(() {});
-                  bool success = await BackendApi.login();
+                  bool success =
+                      await BackendApi.login(email: email, password: password);
                   if (success) {
                     await BackendApi.getUserProfile();
                     Get.toNamed(RouteHelper.dashBoard);
                   } else {
-                    //TODO: show error message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("wrong username or password")));
                   }
                   isLoading = false;
                   setState(() {});

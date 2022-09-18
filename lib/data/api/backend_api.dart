@@ -264,7 +264,7 @@ class BackendApi {
     }
   }
 
-  static getUserTickets() async {
+  static Future<List<Ticket>> getUserTickets() async {
     Response res = await post(
       Uri.parse("$_domain/user-tickets/"),
       headers: headers,
@@ -275,8 +275,11 @@ class BackendApi {
 
     if (res.statusCode == 200) {
       log("getUserTickets Success");
+      List ticketData = jsonDecode(res.body);
+      return ticketData.map((t) => Ticket.fromMap(t)).toList();
     } else {
       log("getUserTickets Error ${res.statusCode}");
+      throw res.body;
     }
   }
 }
