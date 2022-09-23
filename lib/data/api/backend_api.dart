@@ -124,18 +124,6 @@ class BackendApi {
     }
   }
 
-  // static getBusAgencies() async {
-  //   Response res = await get(Uri.parse("$_domain/"), headers: {
-  //     'content-type': 'application/json',
-  //     'authorization': "Token $_token"
-  //   });
-
-  //   if (res.statusCode == 200) {
-  //   } else {
-  //     log("getBusAgencies: ");
-  //   }
-  // }
-
   static Future<List<Category>> getCategories() async {
     Response res = await get(
       Uri.parse("$_domain/categories/"),
@@ -210,20 +198,38 @@ class BackendApi {
     }
   }
 
-  static makePayment({phone, amount = 1, bookingId, network = "VOD"}) async {
-    Response res = await post(Uri.parse("$_domain/pay-for-trip/"),
-        headers: headers,
-        body: jsonEncode({
+  static Future<bool?> makePayment(
+      {phone, amount = 1, bookingId, network = "VOD"}) async {
+    Response res = await post(
+      Uri.parse("$_domain/pay-for-trip/"),
+      headers: headers,
+      body: jsonEncode(
+        {
           "network": network,
           'source_phone': phone,
           'amount': amount,
           'booking': bookingId,
-        }));
+        },
+      ),
+    );
 
     if (res.statusCode == 200) {
       log("makePayment successfull");
+      Map<String, dynamic> resData = jsonDecode(res.body);
+      if (resData['data']['status_code'] == "000") {
+        // transaction successful
+        return true;
+      } else if (resData['data']["status_code"] == "004" ||
+          resData['data']["status_code"] == "007") {
+        // transaction pending
+        return null;
+      } else {
+        // transaction failed
+        return false;
+      }
     } else {
       log("makePayment Error: ${res.statusCode}");
+      return false;
     }
   }
 

@@ -45,15 +45,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp( //TODO: put Get there
+    return GetMaterialApp(
+      //TODO: put Get there
       theme: ThemeData(
         buttonColor: Colours.magenta,
         textTheme: const TextTheme(
-          subtitle1: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: 'Gilroy-Regular'),
+          subtitle1: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Gilroy-Regular',
+          ),
         ),
-        appBarTheme: AppBarTheme(
-            color: Colours.darkBlue
-        ),
+        appBarTheme: AppBarTheme(color: Colours.darkBlue),
         fontFamily: "Gilroy-Regular",
       ),
       home: SplashScreen(),
@@ -63,6 +66,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-

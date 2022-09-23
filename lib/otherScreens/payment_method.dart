@@ -24,6 +24,7 @@ class PaymentMethod extends StatefulWidget {
 class _PaymentMethodState extends State<PaymentMethod> {
   bool mtn = true;
   String phone = "";
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -146,9 +147,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SizedBox(height: 20),
                       Container(
                         width: width,
                         height: 48,
@@ -190,19 +189,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                   child: InkWell(
-                    onTap: () async {
-                      await BackendApi.makePayment(
-                        phone: phone,
-                        // amount: widget.amount, // TODO: uncomment
-                        bookingId: widget.bookingId,
-                        network: mtn ? "MTN" : "VOD",
-                      );
-                      Ticket ticket = await BackendApi.getTicket(4);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => BusTicketScreen(
-                                ticket: ticket,
-                              )));
-                    },
+                    onTap: onMakePayment,
                     child: Container(
                       width: width,
                       height: 50,
@@ -210,13 +197,16 @@ class _PaymentMethodState extends State<PaymentMethod> {
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.blueAccent),
                       child: Center(
-                        child: Text(
-                          'Pay GHC ${widget.amount}',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16),
-                        ),
+                        child: isLoading
+                            ? CircularProgressIndicator(color: Colors.white)
+                            : Text(
+                                'Pay GHC ${widget.amount}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                ),
+                              ),
                       ),
                     ),
                   ),
@@ -227,5 +217,55 @@ class _PaymentMethodState extends State<PaymentMethod> {
         ],
       ),
     );
+  }
+
+  onMakePayment() async {
+    if (phone.isNotEmpty) {
+      isLoading = true;
+      setState(() {});
+      bool? status = await BackendApi.makePayment(
+        phone: phone,
+        // amount: widget.amount, // TODO: uncomment
+        bookingId: widget.bookingId,
+        network: mtn ? "MTN" : "VOD",
+      );
+
+      Ticket ticket = await BackendApi.getTicket(4);
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => BusTicketScreen(ticket: ticket),
+        ),
+      );
+
+      //   if (status == null) {
+      //     showDialog(
+      //       context: context,
+      //       builder: (context) => AlertDialog(
+      //         content: Text("Transaction pending, please check your approvals"),
+      //       ),
+      //     );
+      //     //pending
+      //   } else if (!status) {
+      //     ScaffoldMessenger.of(context)
+      //         .showSnackBar(SnackBar(content: Text("Transaction unsuccessful")));
+      //     //failed
+      //   } else {
+      //     //successful
+      //     ScaffoldMessenger.of(context)
+      //         .showSnackBar(SnackBar(content: Text("Transaction successful")));
+      //     Ticket ticket = await BackendApi.getTicket(4);
+      //     Navigator.of(context).push(
+      //       MaterialPageRoute(
+      //         builder: (_) => BusTicketScreen(ticket: ticket),
+      //       ),
+      //     );
+      //   }
+      // } else {
+      //   ScaffoldMessenger.of(context)
+      //       .showSnackBar(SnackBar(content: Text("please enter mobiel number")));
+      // }
+      isLoading = false;
+      setState(() {});
+    }
   }
 }

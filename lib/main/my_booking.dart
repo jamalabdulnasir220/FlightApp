@@ -1,8 +1,4 @@
-import 'dart:developer';
-
 import 'package:barcode_widget/barcode_widget.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:theo/data/api/backend_api.dart';
@@ -31,8 +27,8 @@ class _MyBookingState extends State<MyBooking> {
       _ticketsList.value = null;
     }
     try {
-      // _ticketsList.value = await BackendApi.getUserTickets(); //TODO: uncomment
-      _ticketsList.value = [Ticket()];
+      _ticketsList.value = await BackendApi.getUserTickets(); //TODO: uncomment
+      // _ticketsList.value = [Ticket()];
     } catch (e) {
       _ticketsList.value = [];
     }
@@ -147,7 +143,7 @@ class _MyBookingState extends State<MyBooking> {
           Text("No tickets"),
           ElevatedButton(
               onPressed: () {
-                getTicketData();
+                getTicketData(isRefresh: true);
               },
               child: Text("Reload"))
         ],
