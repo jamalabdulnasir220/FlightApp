@@ -61,10 +61,9 @@ class BackendApi {
     );
     if (res.statusCode == 200) {
       log("signUp successfull");
-      return true;
     } else {
       log("signUp Error: ${res.statusCode} ${res.body}");
-      return false;
+      throw jsonDecode(res.body);
     }
   }
 

@@ -225,7 +225,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
       setState(() {});
       String? status = await BackendApi.makePayment(
         phone: phone,
-        // amount: widget.amount, // TODO: uncomment
+        // amount: widget.amount, //TODO: uncomment
         bookingId: widget.bookingId,
         network: mtn ? "MTN" : "VOD",
       );

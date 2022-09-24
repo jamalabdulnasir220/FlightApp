@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       //TODO: put Get there
       theme: ThemeData(
         buttonColor: Colours.magenta,

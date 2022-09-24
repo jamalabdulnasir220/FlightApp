@@ -144,9 +144,11 @@ class _BusTicketScreenState extends State<BusTicketScreen> {
                       isCornerRounded: true,
                       padding: const EdgeInsets.all(20),
                       child: TicketData(
+                        ticketId: widget.ticket.ticketId ?? "~",
                         name: widget.ticket.user!,
                         seats: widget.ticket.seats!,
                         bookingCode: widget.ticket.bookingCode!,
+                        vehicleNum: widget.ticket.vehicleNumber ?? "",
                       ),
                     ),
                   ),
@@ -357,9 +359,13 @@ class TicketData extends StatelessWidget {
   String name;
   String seats;
   String bookingCode;
+  String vehicleNum;
+  String ticketId;
   TicketData({
     this.name = "John Doe",
+    this.ticketId = "~",
     this.seats = "7",
+    this.vehicleNum = "",
     this.bookingCode = 'G459FG54',
     Key? key,
   }) : super(key: key);
@@ -380,23 +386,20 @@ class TicketData extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text('Full Name',
+                    Text('Ticket ID',
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w800,
                             color: Colors.grey)),
                   ],
                 ),
+                SizedBox(height: 10),
                 SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width / 3.5,
+                    // width: MediaQuery.of(context).size.width / 3.5,
                     child: Text(
-                      'Baba Jamal Nasir Abdul',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
-                    )),
+                  ticketId,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                )),
               ],
             ),
             Column(
@@ -415,39 +418,36 @@ class TicketData extends StatelessWidget {
                   height: 10,
                 ),
                 SizedBox(
-                    width: MediaQuery.of(context).size.width / 3.5,
+                    // width: MediaQuery.of(context).size.width / 3.5,
                     child: Text(
-                      'Seat ${seats}',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
-                    )),
+                  'Seat ${seats}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+                )),
               ],
             ),
           ],
         ),
-        Row(
-          children: List.generate(
-              width ~/ 10,
-              (index) => Expanded(
-                    child: Container(
-                      color: index % 2 == 0
-                          ? Colors.transparent
-                          : Colors.grey[300],
-                      height: 1,
-                    ),
-                  )),
-        ),
-        Container(
-          height: 70,
-          child: Center(
-            child: BarcodeWidget(
-              barcode: Barcode.code128(), // Barcode type and settings
-              data: 'Booking Code G459FG54', //
-              width: 200, // Content
-              height: 70,
-            ),
-          ),
-        )
+        // SizedBox(
+        //   height: 20,
+        //   width: double.infinity,
+        //   child: Row(
+        //     children: List.generate(
+        //         width ~/ 10,
+        //         (index) => Container(
+        //               color: index % 2 == 0
+        //                   ? Colors.transparent
+        //                   : Colors.grey[300],
+        //               height: 1,
+        //             )),
+        //   ),
+        // ),
+        BarcodeWidget(
+            padding: EdgeInsets.zero,
+            barcode: Barcode.qrCode(), // Barcode type and settings
+            data:
+                "Name: $name\nVehicle number: $vehicleNum\nBooking code: $bookingCode"
+            // backgroundColor: Colors.pink,
+            )
       ],
     );
   }

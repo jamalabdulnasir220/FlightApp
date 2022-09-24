@@ -7,12 +7,19 @@ import 'package:theo/Routes/route_helper.dart';
 import 'package:theo/dashboard.dart';
 import 'package:theo/data/api/backend_api.dart';
 import 'package:theo/otherScreens/payment_method.dart';
+import 'package:theo/splash_login/login_screen.dart';
 
 import '../components/app_text_field.dart';
 import '../dimensions/dimensions.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   SignUpScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   bool isLoading = false;
 
   @override
@@ -76,15 +83,39 @@ class SignUpScreen extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () async {
-                  if (password == confirmPassword) {
-                    await BackendApi.signUp();
-                    // Get.toNamed(RouteHelper.dashBoard);
-                  } else {
+                  if (firstName.isEmpty ||
+                      lastName.isEmpty ||
+                      email.isEmpty ||
+                      password.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("please enter required data")));
+                  } else if (password != confirmPassword) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Password doesn't match"),
                       ),
                     );
+                  } else {
+                    isLoading = true;
+                    setState(() {});
+                    try {
+                      await BackendApi.signUp(
+                        firstName: firstName,
+                        lastName: lastName,
+                        email: email,
+                        password: password,
+                      );
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoginScreen()));
+                    } catch (e) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(e.toString())));
+                    }
+                    // Get.toNamed(RouteHelper.dashBoard);
+                    isLoading = false;
+                    setState(() {});
                   }
                 },
                 child: Container(
@@ -98,12 +129,17 @@ class SignUpScreen extends StatelessWidget {
                     color: Colors.lightBlue,
                   ),
                   child: Center(
-                    child: Text(
-                      'Sign up',
-                      style: TextStyle(
-                          fontSize: Dimensions.font20 + Dimensions.font20 / 2,
-                          color: Colors.white),
-                    ),
+                    child: isLoading
+                        ? CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : Text(
+                            'Sign up',
+                            style: TextStyle(
+                                fontSize:
+                                    Dimensions.font20 + Dimensions.font20 / 2,
+                                color: Colors.white),
+                          ),
                   ),
                 ),
               ),

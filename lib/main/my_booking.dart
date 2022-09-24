@@ -27,8 +27,7 @@ class _MyBookingState extends State<MyBooking> {
       _ticketsList.value = null;
     }
     try {
-      _ticketsList.value = await BackendApi.getUserTickets(); //TODO: uncomment
-      // _ticketsList.value = [Ticket()];
+      _ticketsList.value = await BackendApi.getUserTickets(); //TODO: uncomment.
     } catch (e) {
       _ticketsList.value = [];
     }
