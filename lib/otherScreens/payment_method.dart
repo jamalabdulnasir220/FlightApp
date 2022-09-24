@@ -223,49 +223,48 @@ class _PaymentMethodState extends State<PaymentMethod> {
     if (phone.isNotEmpty) {
       isLoading = true;
       setState(() {});
-      bool? status = await BackendApi.makePayment(
+      String? status = await BackendApi.makePayment(
         phone: phone,
         // amount: widget.amount, // TODO: uncomment
         bookingId: widget.bookingId,
         network: mtn ? "MTN" : "VOD",
       );
 
-      Ticket ticket = await BackendApi.getTicket(4);
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => BusTicketScreen(ticket: ticket),
-        ),
-      );
+      // Ticket ticket = await BackendApi.getTicket(4);
+      // Navigator.of(context).push(
+      //   MaterialPageRoute(
+      //     builder: (_) => BusTicketScreen(ticket: ticket),
+      //   ),
+      // );
 
-      //   if (status == null) {
-      //     showDialog(
-      //       context: context,
-      //       builder: (context) => AlertDialog(
-      //         content: Text("Transaction pending, please check your approvals"),
-      //       ),
-      //     );
-      //     //pending
-      //   } else if (!status) {
-      //     ScaffoldMessenger.of(context)
-      //         .showSnackBar(SnackBar(content: Text("Transaction unsuccessful")));
-      //     //failed
-      //   } else {
-      //     //successful
-      //     ScaffoldMessenger.of(context)
-      //         .showSnackBar(SnackBar(content: Text("Transaction successful")));
-      //     Ticket ticket = await BackendApi.getTicket(4);
-      //     Navigator.of(context).push(
-      //       MaterialPageRoute(
-      //         builder: (_) => BusTicketScreen(ticket: ticket),
-      //       ),
-      //     );
-      //   }
-      // } else {
-      //   ScaffoldMessenger.of(context)
-      //       .showSnackBar(SnackBar(content: Text("please enter mobiel number")));
-      // }
-      isLoading = false;
-      setState(() {});
+      if (status == null) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: Text("Transaction unsuccessful, please try again"),
+          ),
+        );
+        //pending
+      } else if (status.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("Transaction pending, please check your approvals")));
+        //failed
+      } else {
+        //successful
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Transaction successful")));
+        Ticket ticket = await BackendApi.getTicket(status);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => BusTicketScreen(ticket: ticket),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("please enter mobile number")));
     }
+    isLoading = false;
+    setState(() {});
   }
 }

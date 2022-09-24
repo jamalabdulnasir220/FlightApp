@@ -198,7 +198,7 @@ class BackendApi {
     }
   }
 
-  static Future<bool?> makePayment(
+  static Future<String?> makePayment(
       {phone, amount = 1, bookingId, network = "VOD"}) async {
     Response res = await post(
       Uri.parse("$_domain/pay-for-trip/"),
@@ -218,18 +218,18 @@ class BackendApi {
       Map<String, dynamic> resData = jsonDecode(res.body);
       if (resData['data']['status_code'] == "000") {
         // transaction successful
-        return true;
+        return resData['data']['transaction_id'];
       } else if (resData['data']["status_code"] == "004" ||
           resData['data']["status_code"] == "007") {
         // transaction pending
-        return null;
+        return "";
       } else {
         // transaction failed
-        return false;
+        return null;
       }
     } else {
       log("makePayment Error: ${res.statusCode}");
-      return false;
+      return null;
     }
   }
 
@@ -257,7 +257,7 @@ class BackendApi {
       Uri.parse("$_domain/get-ticket/"),
       headers: headers,
       body: jsonEncode(
-        {'transaction_id': "I62CV8MS92G0"},
+        {'transaction_id': transId},
       ),
     );
 
