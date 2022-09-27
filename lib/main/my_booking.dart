@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +33,7 @@ class _MyBookingState extends State<MyBooking> {
     }
     try {
       _ticketsList.value = await BackendApi.getUserTickets();
+      log(_ticketsList.value.toString());
       //   Ticket(
       //     amount: 3.3,
       //     agency: "Ejas agency",

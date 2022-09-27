@@ -244,7 +244,7 @@ class BackendApi {
     if (res.statusCode == 200) {
       log("getTicets successful");
       List ticketsData = jsonDecode(res.body);
-      return ticketsData.map((tic) => Ticket.fromMap(tic)).toList();
+      return ticketsData.map((tic) => Ticket.fromMap(json: tic)).toList();
     } else {
       log("getTickets Error: ${res.statusCode}");
       throw "getTickets Error";
@@ -263,7 +263,7 @@ class BackendApi {
     if (res.statusCode == 200) {
       log("getTicket successful");
       Map<String, dynamic> ticketData = jsonDecode(res.body)['ticket_data'];
-      return Ticket.fromMap(ticketData);
+      return Ticket.fromMap(json: ticketData);
     } else {
       log("getTicket Error ${res.statusCode}");
     }
@@ -280,8 +280,15 @@ class BackendApi {
 
     if (res.statusCode == 200) {
       log("getUserTickets Success");
-      List ticketData = jsonDecode(res.body);
-      return ticketData.map((t) => Ticket.fromMap(t)).toList();
+      try {
+        List ticketData = jsonDecode(res.body)['user_tickets'];
+        return ticketData
+            .map((t) => Ticket.fromMap(json: t, isBookings: true))
+            .toList();
+      } catch (e) {
+        log(e.toString());
+        throw e.toString();
+      }
     } else {
       log("getUserTickets Error ${res.statusCode}");
       throw res.body;

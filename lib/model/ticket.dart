@@ -26,19 +26,21 @@ class Ticket {
   String? ticketId;
   String? tripType;
 
-  factory Ticket.fromMap(Map<String, dynamic> json) => Ticket(
+  factory Ticket.fromMap(
+          {required Map<String, dynamic> json, isBookings = false}) =>
+      Ticket(
         user: json["user"],
         agency: json["agency"],
         vehicleNumber: json["vehicle_number"],
         bookingCode: json["booking_code"],
         source: json["source"],
         destination: json["destination"],
-        date: DateTime.parse(json["date"]),
-        time: json["time"],
+        date: DateTime.parse(json[isBookings ? "departure_date" : "date"]),
+        time: json[isBookings ? "departure_time" : "time"],
         seats: json["seats"],
-        amount: json["amount"],
+        amount: isBookings ? json['price'] : json["amount"],
         ticketId: json["ticket_id"],
-        tripType: json['trip_type'],
+        tripType: isBookings ? null : json['trip_type'],
       );
 
   // Map<String, dynamic> toMap() => {
