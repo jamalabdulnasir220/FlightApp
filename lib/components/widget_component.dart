@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 class WidgetComponent {
-  static FlatButton flatButton({
+  static TextButton flatButton({
     required Widget buttons,
     required Color colors,
     VoidCallback? onPressed,
   }) =>
-      FlatButton(
+      TextButton(
         child: buttons,
-        color: colors,
+        // color: colors,
         onPressed: onPressed,
       );
   static TextFormField formField({

@@ -1,4 +1,5 @@
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:theo/data/api/backend_api.dart';
@@ -29,8 +30,22 @@ class _MyBookingState extends State<MyBooking> {
       _ticketsList.value = null;
     }
     try {
-      // _ticketsList.value = await BackendApi.getUserTickets(); //TODO: uncomment.
-      _ticketsList.value = [Ticket()];
+      _ticketsList.value = await BackendApi.getUserTickets();
+      //   Ticket(
+      //     amount: 3.3,
+      //     agency: "Ejas agency",
+      //     bookingCode: "gdkfjdkjfd",
+      //     date: DateTime.now(),
+      //     destination: "Accra",
+      //     source: "Kumasi",
+      //     seats: "1, 2",
+      //     ticketId: "erekjkej",
+      //     time: "Time",
+      //     user: "Ejas",
+      //     vehicleNumber: "4433",
+      //     tripType: "Bus",
+      //   ),
+      // ];
     } catch (e) {
       _ticketsList.value = [];
     }
@@ -56,78 +71,59 @@ class _MyBookingState extends State<MyBooking> {
                         ? noTicketsWidget()
                         : ListView(
                             children: [
-                              const SizedBox(height: 16),
                               Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 7),
+                                padding: EdgeInsets.symmetric(horizontal: 7),
                                 height: 38,
                                 width: width,
                                 child: ListView(
                                   scrollDirection: Axis.horizontal,
                                   children: [
-                                    InkWell(
-                                      onTap: () {
-                                        if (mounted) {
-                                          setState(() {
-                                            selectedFilter = 'All';
-                                          });
-                                        }
-                                      },
-                                      child: FilterCard(
-                                        filterName: 'All',
-                                        isActive: selectedFilter == 'All'
-                                            ? true
-                                            : false,
-                                      ),
-                                    ),
-                                    InkWell(
-                                        onTap: () {
-                                          if (mounted) {
-                                            setState(() {
-                                              selectedFilter = 'Flight';
-                                            });
-                                          }
-                                        },
-                                        child: FilterCard(
-                                            filterName: 'Flight',
-                                            isActive: selectedFilter == 'Flight'
-                                                ? true
-                                                : false)),
-                                    InkWell(
-                                        onTap: () {
-                                          if (mounted) {
-                                            setState(() {
-                                              selectedFilter = 'Bus';
-                                            });
-                                          }
-                                        },
-                                        child: FilterCard(
-                                          filterName: 'Bus',
-                                          isActive: selectedFilter == 'Bus'
-                                              ? true
-                                              : false,
-                                        )),
+                                    // InkWell(
+                                    //   onTap: () {
+                                    //     if (mounted) {
+                                    //       setState(() {
+                                    //         selectedFilter = 'All';
+                                    //       });
+                                    //     }
+                                    //   },
+                                    //   child: FilterCard(
+                                    //     filterName: 'All',
+                                    //     isActive: selectedFilter == 'All'
+                                    //         ? true
+                                    //         : false,
+                                    //   ),
+                                    // ),
+                                    // InkWell(
+                                    //     onTap: () {
+                                    //       if (mounted) {
+                                    //         setState(() {
+                                    //           selectedFilter = 'Flight';
+                                    //         });
+                                    //       }
+                                    //     },
+                                    //     child: FilterCard(
+                                    //         filterName: 'Flight',
+                                    //         isActive: selectedFilter == 'Flight'
+                                    //             ? true
+                                    //             : false)),
+                                    // InkWell(
+                                    //     onTap: () {
+                                    //       if (mounted) {
+                                    //         setState(() {
+                                    //           selectedFilter = 'Bus';
+                                    //         });
+                                    //       }
+                                    //     },
+                                    //     child: FilterCard(
+                                    //       filterName: 'Bus',
+                                    //       isActive: selectedFilter == 'Bus'
+                                    //           ? true
+                                    //           : false,
+                                    //     )),
                                   ],
                                 ),
                               ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              // the order details card
-                              const OrderDetailsCard(
-                                orderStatus: 'active',
-                              ),
-                              const OrderDetailsCard(orderStatus: "active"),
-                              const OrderDetailsCard(orderStatus: "complete"),
-                              const OrderDetailsCard(orderStatus: "complete"),
-                              const OrderDetailsCard(orderStatus: "active"),
-                              const OrderDetailsCard(orderStatus: "active"),
-                              const OrderDetailsCard(orderStatus: "active"),
-                              const OrderDetailsCard(orderStatus: "active"),
-                              const OrderDetailsCard(orderStatus: "active"),
-                              const OrderDetailsCard(orderStatus: "active"),
-                              const OrderDetailsCard(orderStatus: "active"),
-                              const OrderDetailsCard(orderStatus: "active"),
+                              ...data.map((e) => OrderDetailsCard(ticket: e)),
                             ],
                           ),
               );
@@ -192,9 +188,9 @@ class FilterCard extends StatelessWidget {
 }
 
 class OrderDetailsCard extends StatelessWidget {
-  final String orderStatus;
-  const OrderDetailsCard({Key? key, required this.orderStatus})
-      : super(key: key);
+  // final String orderStatus;
+  final Ticket ticket;
+  const OrderDetailsCard({Key? key, required this.ticket}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -235,7 +231,7 @@ class OrderDetailsCard extends StatelessWidget {
                                   height: 10,
                                 ),
                                 Text(
-                                  'GS-22345-5435',
+                                  ticket.vehicleNumber ?? "#",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400),
@@ -260,7 +256,7 @@ class OrderDetailsCard extends StatelessWidget {
                                   height: 10,
                                 ),
                                 Text(
-                                  'Metro Mass',
+                                  ticket.agency ?? "~",
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400),
@@ -294,7 +290,7 @@ class OrderDetailsCard extends StatelessWidget {
                                   height: 10,
                                 ),
                                 Text(
-                                  'GHC 500.00',
+                                  ticket.amount.toString(),
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400),
@@ -305,9 +301,7 @@ class OrderDetailsCard extends StatelessWidget {
                         ],
                       ),
 
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SizedBox(height: 20),
 
                       // flignt ticket
                       Container(
@@ -323,7 +317,12 @@ class OrderDetailsCard extends StatelessWidget {
                           height: 250,
                           isCornerRounded: true,
                           padding: EdgeInsets.all(20),
-                          child: TicketData(),
+                          child: TicketData(
+                            bookingCode: ticket.bookingCode!,
+                            seats: ticket.seats!,
+                            vehicleNum: ticket.vehicleNumber!,
+                            ticketId: ticket.ticketId!,
+                          ),
                         ),
                       ),
                       Container(
@@ -341,9 +340,7 @@ class OrderDetailsCard extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w800),
                             ),
-                            SizedBox(
-                              height: 20,
-                            ),
+                            SizedBox(height: 20),
                             Container(
                               height: 150,
                               child: Row(
@@ -361,13 +358,14 @@ class OrderDetailsCard extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            '20:00',
+                                            (ticket.time ?? "~") + ' GMT',
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w800),
                                           ),
                                           Text(
-                                            'Thu, 1 Apr',
+                                            formatDate(ticket.date!,
+                                                [D, ", ", dd, " ", M]),
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500,
@@ -375,36 +373,40 @@ class OrderDetailsCard extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            '5:00 Hrs',
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w800,
-                                                color: HexColor('#2B5AB5')),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '01:20',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w800),
-                                          ),
-                                          Text(
-                                            'Thu, 1 Apr',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500,
-                                                color: HexColor('#A0A0A0')),
-                                          ),
-                                        ],
-                                      ),
+                                      // Column(
+                                      //   mainAxisAlignment:
+                                      //       MainAxisAlignment.spaceBetween,
+                                      //   crossAxisAlignment:
+                                      //       CrossAxisAlignment.start,
+                                      //   children: [
+                                      //     Text(
+                                      //       '5:00 Hrs',
+                                      //       style: TextStyle(
+                                      //           fontSize: 20,
+                                      //           fontWeight: FontWeight.w800,
+                                      //           color: HexColor('#2B5AB5')),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                      // Column(
+                                      //   crossAxisAlignment:
+                                      //       CrossAxisAlignment.start,
+                                      //   children: [
+                                      //     Text(
+                                      //       '01:20',
+                                      //       style: TextStyle(
+                                      //           fontSize: 18,
+                                      //           fontWeight: FontWeight.w800),
+                                      //     ),
+                                      //     Text(
+                                      //       'Thu, 1 Apr',
+                                      //       style: TextStyle(
+                                      //           fontSize: 16,
+                                      //           fontWeight: FontWeight.w500,
+                                      //           color: HexColor('#A0A0A0')),
+                                      //     ),
+                                      //   ],
+                                      // ),
                                     ],
                                   ),
                                   Row(
@@ -481,7 +483,7 @@ class OrderDetailsCard extends StatelessWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'Kuamsi',
+                                                ticket.destination ?? "~",
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight:
@@ -495,11 +497,11 @@ class OrderDetailsCard extends StatelessWidget {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'Accra',
+                                                ticket.source ?? "~",
                                                 style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.w800),
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w800,
+                                                ),
                                               ),
                                               // Text('Kotoka Airport',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: HexColor('#A0A0A0')),),
                                             ],
@@ -549,7 +551,7 @@ class OrderDetailsCard extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            "Ticket id #GG123S3",
+                            "Ticket id ${ticket.ticketId ?? "#"}",
                             style: TextStyle(
                                 fontFamily: "Gilroy-Medium",
                                 fontSize: 14.0,
@@ -562,7 +564,7 @@ class OrderDetailsCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "GHC 500.00",
+                            "Ghc ${ticket.amount}",
                             style: TextStyle(
                                 fontFamily: "Gilroy-SemiBold",
                                 fontSize: 14.0,
@@ -580,7 +582,13 @@ class OrderDetailsCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Booked on Sat, Nov 28",
+                        "Booked on ${ticket.date == null ? "~" : formatDate(ticket.date!, [
+                                D,
+                                ", ",
+                                dd,
+                                " ",
+                                M
+                              ])}",
                         style: TextStyle(
                           color: HexColor("828282"),
                           fontFamily: "Gilroy-Medium",
@@ -601,7 +609,7 @@ class OrderDetailsCard extends StatelessWidget {
                         width: 3,
                       ),
                       Text(
-                        "08:30 PM",
+                        (ticket.time ?? "~") + "GMT",
                         style: TextStyle(
                           color: HexColor("828282"),
                           fontFamily: "Gilroy-Medium",
@@ -617,7 +625,13 @@ class OrderDetailsCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Departure Date Mon, Nov 31",
+                        "Departure Date ${ticket.date == null ? "~" : formatDate(ticket.date!, [
+                                D,
+                                ", ",
+                                dd,
+                                " ",
+                                M
+                              ])}",
                         style: TextStyle(
                           color: HexColor("828282"),
                           fontFamily: "Gilroy-Medium",
@@ -638,7 +652,7 @@ class OrderDetailsCard extends StatelessWidget {
                         width: 3,
                       ),
                       Text(
-                        "08:30 PM",
+                        ticket.time ?? "~" + "GMT",
                         style: TextStyle(
                           color: HexColor("828282"),
                           fontFamily: "Gilroy-Medium",
@@ -664,7 +678,7 @@ class OrderDetailsCard extends StatelessWidget {
                         width: 8,
                       ),
                       Text(
-                        "Accra",
+                        ticket.source ?? "~",
                         style: TextStyle(
                           color: Theme.of(context).textTheme.caption?.color,
                           fontFamily: "Gilroy-Medium",
@@ -777,7 +791,7 @@ class OrderDetailsCard extends StatelessWidget {
                         width: 8,
                       ),
                       Text(
-                        "Kumasi",
+                        ticket.destination ?? "~",
                         style: TextStyle(
                           color: Theme.of(context).textTheme.caption?.color,
                           fontFamily: "Gilroy-Medium",
@@ -785,9 +799,7 @@ class OrderDetailsCard extends StatelessWidget {
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                 ],
               ),
             ),
